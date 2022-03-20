@@ -1,9 +1,13 @@
 import java.util.ArrayList;
+import java.util.Map;
 
 public class HyperedgeReplacementGrammar {
     private ArrayList<String> nonTerminalLabels = new ArrayList<>();
     private ArrayList<String> terminalLabels = new ArrayList<>();
-    //TODO Production: lhs (label) and rhs (hypergraph) so maybe tuple of the two. Find concrete example.
+    //TODO Production: two separate entities with mapping between
+    private ArrayList<String> productionLHS = new ArrayList<>();
+    private Hypergraph productionRHS = new Hypergraph();
+    private Map<String, Hypergraph> productions;
     private String startingSymbol; //Defined from non-terminal labels
     //TODO markFunctions: marking of labels and such. Need to see concrete example, not mathematical.
 
