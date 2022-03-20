@@ -1,20 +1,22 @@
 import java.util.ArrayList;
-import java.util.Map;
+import java.util.List;
 
 public class HyperedgeReplacementGrammar {
-    private ArrayList<String> nonTerminalLabels = new ArrayList<>();
-    private ArrayList<String> terminalLabels = new ArrayList<>();
-    //TODO Production: two separate entities with mapping between
-    private ArrayList<String> productionLHS = new ArrayList<>();
-    private Hypergraph productionRHS = new Hypergraph();
-    private Map<String, Hypergraph> productions;
+    private ArrayList<String> nonTerminalLabels = new ArrayList<>();    //Labels that identify the non-terminal hyperedges
+    private ArrayList<String> terminalLabels = new ArrayList<>();   //Labels that identify the terminal hyperedges
+
+    //Stack for productions.
+//    private ArrayList<String> productionLHS = new ArrayList<>();
+//    private Hypergraph productionRHS = new Hypergraph();
+    private List<List<Object>> allProductions = new ArrayList<List<Object>>(); //Add a arraylist with lhs, production number, rhs, and internal node(?)
+
     private String startingSymbol; //Defined from non-terminal labels
     //TODO markFunctions: marking of labels and such. Need to see concrete example, not mathematical.
 
-
-    public HyperedgeReplacementGrammar(ArrayList<String> nonTerminalLabels, ArrayList<String> terminalLabels, String startingSymbol) {
+    public HyperedgeReplacementGrammar(ArrayList<String> nonTerminalLabels, ArrayList<String> terminalLabels, List<List<Object>> allProductions, String startingSymbol) {
         this.nonTerminalLabels = nonTerminalLabels;
         this.terminalLabels = terminalLabels;
+        this.allProductions = allProductions;
         this.startingSymbol = startingSymbol;
     }
 
@@ -41,4 +43,13 @@ public class HyperedgeReplacementGrammar {
     public void setStartingSymbol(String startingSymbol) {
         this.startingSymbol = startingSymbol;
     }
+
+    public List<List<Object>> getAllProductions() {
+        return allProductions;
+    }
+
+    public void setAllProductions(List<List<Object>> allProductions) {
+        this.allProductions = allProductions;
+    }
+
 }
