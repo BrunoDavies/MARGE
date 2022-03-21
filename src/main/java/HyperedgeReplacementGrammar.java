@@ -8,16 +8,21 @@ public class HyperedgeReplacementGrammar {
     //Stack for productions.
 //    private ArrayList<String> productionLHS = new ArrayList<>();
 //    private Hypergraph productionRHS = new Hypergraph();
-    private List<List<Object>> allProductions = new ArrayList<List<Object>>(); //Add a arraylist with lhs, production number, rhs, and internal node(?)
+    private List<List<Object>> allProductions = new ArrayList<List<Object>>(); //Add a arraylist with lhs, production id, rhs, and indicator of terminal production
+    //Individual production format: {String, String, Hypergraph, Int}
 
     private String startingSymbol; //Defined from non-terminal labels
-    //TODO markFunctions: marking of labels and such. Need to see concrete example, not mathematical.
+
+    //Not really needed? Maybe needed in GraphGeneration or not at all.
+    //TODO markFunctions: marking of labels to be replaced. Need to see concrete example, not mathematical.
 
     public HyperedgeReplacementGrammar(ArrayList<String> nonTerminalLabels, ArrayList<String> terminalLabels, List<List<Object>> allProductions, String startingSymbol) {
         this.nonTerminalLabels = nonTerminalLabels;
         this.terminalLabels = terminalLabels;
         this.allProductions = allProductions;
         this.startingSymbol = startingSymbol;
+
+
     }
 
     public ArrayList<String> getNonTerminalLabels() {
