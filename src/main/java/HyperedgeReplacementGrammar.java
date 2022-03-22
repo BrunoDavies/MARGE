@@ -6,8 +6,8 @@ public class HyperedgeReplacementGrammar {
     private ArrayList<String> terminalLabels = new ArrayList<>();   //Labels that identify the terminal hyperedges
 
     //Stack for productions.
-//    private ArrayList<String> productionLHS = new ArrayList<>();
-//    private Hypergraph productionRHS = new Hypergraph();
+    // ArrayList<String> productionLHS = new ArrayList<>();
+    // Hypergraph productionRHS = new Hypergraph();
     private List<List<Object>> allProductions = new ArrayList<List<Object>>(); //Add a arraylist with lhs, production id, rhs, and indicator of terminal production
     //Individual production format: {String, String, Hypergraph, Int}
 
@@ -21,8 +21,55 @@ public class HyperedgeReplacementGrammar {
         this.terminalLabels = terminalLabels;
         this.allProductions = allProductions;
         this.startingSymbol = startingSymbol;
+        
+        boolean thisValidHRG = validHRG();
+    }
 
+    //TODO write test
+    private boolean validHRG() {
+        boolean nonTerminalLabelFinite = Double.isFinite(nonTerminalLabels.size());
+        boolean terminalLabelFinite = Double.isFinite(terminalLabels.size());
+        //Intersection of nonTer and Ter needs to be empty
+        boolean intersectionOfNonTerminalAndTerminal = checkIntersectionIsEmpty(nonTerminalLabels, terminalLabels);
+        //Check if list of productions is finite?
+        boolean startIsInNonTerminal = nonTerminalLabels.contains(startingSymbol);
+        boolean allProductionsValid = allProductionValid(allProductions);
 
+        //maybe a cleaner way to do this
+        if (nonTerminalLabelFinite && terminalLabelFinite && intersectionOfNonTerminalAndTerminal && startIsInNonTerminal
+                && allProductionsValid)
+        {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean allProductionValid(List<List<Object>> allProductions) {
+        //Case 1: Er = {e1, e2} where lab(e1), lab(e2) are in the set of NonTerminalLabels && mark(e1) =/= mark(e2)
+        //Case 2: Er = {e1} where lab(e1} in set of TerminalLabels and mark(e1) = alpha (isolated node I think?)
+        //Case 3: Er = Empty set, |Vr| > |extR| - meaning we consider all terminal productions
+        //Case 4: A=S, p is the empty production and for each q in P, for each e in rhs(q), lab(2) =/= S. This says that
+        // the empty production is only allowed if there is no other production having the starting symbol in its rhs.
+        return false;
+    }
+
+    //TODO write test
+    private boolean checkIntersectionIsEmpty(ArrayList<String> nonTerminalLabels, ArrayList<String> terminalLabels) {
+        List<String> intersectionElements = new ArrayList<String>();
+
+        for (String t : nonTerminalLabels) {
+            if(terminalLabels.contains(t)) {
+                intersectionElements.add(t);
+            }
+        }
+
+        if(intersectionElements.isEmpty()){
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     public ArrayList<String> getNonTerminalLabels() {
