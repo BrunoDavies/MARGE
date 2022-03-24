@@ -8,7 +8,7 @@ public class HyperedgeReplacementGrammar {
     //Stack for productions.
     // ArrayList<String> productionLHS = new ArrayList<>();
     // Hypergraph productionRHS = new Hypergraph();
-    private List<List<Object>> allProductions = new ArrayList<List<Object>>(); //Add a arraylist with lhs, production id, rhs, and indicator of terminal production
+    private List<Production> allProductions; //Add a arraylist with lhs, production id, rhs, and indicator of terminal production
     //Individual production format: {String, String, Hypergraph, Int}
 
     private String startingSymbol; //Defined from non-terminal labels
@@ -16,12 +16,13 @@ public class HyperedgeReplacementGrammar {
     //Not really needed? Maybe needed in GraphGeneration or not at all.
     //TODO markFunctions: marking of labels to be replaced. Need to see concrete example, not mathematical.
 
-    public HyperedgeReplacementGrammar(ArrayList<String> nonTerminalLabels, ArrayList<String> terminalLabels, List<List<Object>> allProductions, String startingSymbol) {
+    public HyperedgeReplacementGrammar(ArrayList<String> nonTerminalLabels, ArrayList<String> terminalLabels, List<Production> allProductions, String startingSymbol) {
         this.nonTerminalLabels = nonTerminalLabels;
         this.terminalLabels = terminalLabels;
         this.allProductions = allProductions;
         this.startingSymbol = startingSymbol;
-        
+
+        //TODO if even one production is not valid throw error to user (need to re-submit a valid HRG).
         boolean thisValidHRG = validHRG();
     }
 
@@ -45,12 +46,26 @@ public class HyperedgeReplacementGrammar {
         }
     }
 
-    private boolean allProductionValid(List<List<Object>> allProductions) {
+    private boolean allProductionValid(List<Production> allProductions) {
+        for (Production singleProduction : allProductions) {
+            if (!singleProductionValid(singleProduction))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean singleProductionValid(Production singleProduction) {
         //Case 1: Er = {e1, e2} where lab(e1), lab(e2) are in the set of NonTerminalLabels && mark(e1) =/= mark(e2)
+
+//        if ()
+
         //Case 2: Er = {e1} where lab(e1} in set of TerminalLabels and mark(e1) = alpha (isolated node I think?)
         //Case 3: Er = Empty set, |Vr| > |extR| - meaning we consider all terminal productions
         //Case 4: A=S, p is the empty production and for each q in P, for each e in rhs(q), lab(2) =/= S. This says that
         // the empty production is only allowed if there is no other production having the starting symbol in its rhs.
+
         return false;
     }
 
@@ -96,11 +111,11 @@ public class HyperedgeReplacementGrammar {
         this.startingSymbol = startingSymbol;
     }
 
-    public List<List<Object>> getAllProductions() {
+    public List<Production> getAllProductions() {
         return allProductions;
     }
 
-    public void setAllProductions(List<List<Object>> allProductions) {
+    public void setAllProductions(List<Production> allProductions) {
         this.allProductions = allProductions;
     }
 
