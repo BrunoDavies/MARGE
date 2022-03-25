@@ -2,18 +2,19 @@ import java.util.ArrayList;
 
 public class Production {
     private String leftHandSideOfProduction;
+    //Might not need
     private int productionId;
     private ArrayList<String> rightHandSideOfProduction;
-    private Hypergraph productionHypergraph;
-    private int numberOfRegNodes;
+    private Hypergraph rightHandSideHypergraph;
+    private int numberOfInternalNodes;
 
     public Production(String leftHandSideOfProduction, int productionId, ArrayList<String> rightHandSideOfProduction,
                       Hypergraph productionHypergraph, int numberOfRegNodes) {
         this.leftHandSideOfProduction = leftHandSideOfProduction;
         this.productionId = productionId;
         this.rightHandSideOfProduction = rightHandSideOfProduction;
-        this.productionHypergraph = productionHypergraph;
-        this.numberOfRegNodes = numberOfRegNodes;
+        this.rightHandSideHypergraph = productionHypergraph;
+        this.numberOfInternalNodes = numberOfRegNodes;
     }
 
     public String getLeftHandSideOfProduction() {
@@ -40,19 +41,19 @@ public class Production {
         this.rightHandSideOfProduction = rightHandSideOfProduction;
     }
 
-    public Hypergraph getProductionHypergraph() {
-        return productionHypergraph;
+    public Hypergraph getRightHandSideHypergraph() {
+        return rightHandSideHypergraph;
     }
 
-    public void setProductionHypergraph(Hypergraph productionHypergraph) {
-        this.productionHypergraph = productionHypergraph;
+    public void setRightHandSideHypergraph(Hypergraph rightHandSideHypergraph) {
+        this.rightHandSideHypergraph = rightHandSideHypergraph;
     }
 
-    public int getNumberOfRegNodes() {
-        return numberOfRegNodes;
+    public int getNumberOfInternalNodes() {
+        return numberOfInternalNodes;
     }
 
-    public void setNumberOfRegNodes(int numberOfRegNodes) {
-        this.numberOfRegNodes = numberOfRegNodes;
+    public void setNumberOfInternalNodes(int numberOfInternalNodes) {
+        this.numberOfInternalNodes = numberOfInternalNodes;
     }
 }

@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class HyperedgeReplacementGrammar {
@@ -13,18 +14,24 @@ public class HyperedgeReplacementGrammar {
 
     private String startingSymbol; //Defined from non-terminal labels
 
-    //Not really needed? Maybe needed in GraphGeneration or not at all.
-    //TODO markFunctions: marking of labels to be replaced. Need to see concrete example, not mathematical.
+    //TODO Check if there are possible duplicate production ids? if no then this works
+    //Just use index as production id.
+//    private HashMap<Integer, Production> mapBetweenProductionIdAndData = new HashMap<Integer, Production>();
 
-    public HyperedgeReplacementGrammar(ArrayList<String> nonTerminalLabels, ArrayList<String> terminalLabels, List<Production> allProductions, String startingSymbol) {
+    public HyperedgeReplacementGrammar(ArrayList<String> nonTerminalLabels, ArrayList<String> terminalLabels,
+                                       List<Production> allProductions, String startingSymbol) {
         this.nonTerminalLabels = nonTerminalLabels;
         this.terminalLabels = terminalLabels;
         this.allProductions = allProductions;
         this.startingSymbol = startingSymbol;
 
-        //TODO if even one production is not valid throw error to user (need to re-submit a valid HRG).
-        boolean thisValidHRG = validHRG();
+        if (!validHRG())
+        {
+            throw new IllegalArgumentException("Invalid Grammar Input");
+        }
+        
     }
+
 
     //TODO write test
     private boolean validHRG() {
@@ -46,6 +53,7 @@ public class HyperedgeReplacementGrammar {
         }
     }
 
+    //TODO write test
     private boolean allProductionValid(List<Production> allProductions) {
         for (Production singleProduction : allProductions) {
             if (!singleProductionValid(singleProduction))
@@ -57,14 +65,37 @@ public class HyperedgeReplacementGrammar {
     }
 
     private boolean singleProductionValid(Production singleProduction) {
-        //Case 1: Er = {e1, e2} where lab(e1), lab(e2) are in the set of NonTerminalLabels && mark(e1) =/= mark(e2)
+        //Case 3: Er = Empty set, |Vr| > |extR| - meaning we consider all terminal productions
+        if (singleProduction.getRightHandSideOfProduction().isEmpty())
+        {
+            //Might not need to check |Vr| > |extR|
+            return true;
+        }
 
-//        if ()
 
         //Case 2: Er = {e1} where lab(e1} in set of TerminalLabels and mark(e1) = alpha (isolated node I think?)
-        //Case 3: Er = Empty set, |Vr| > |extR| - meaning we consider all terminal productions
+        if (singleProduction.getRightHandSideOfProduction().size() == 1 &&
+                terminalLabels.contains(singleProduction.getRightHandSideOfProduction()))
+        {
+            return true;
+        }
+
         //Case 4: A=S, p is the empty production and for each q in P, for each e in rhs(q), lab(2) =/= S. This says that
         // the empty production is only allowed if there is no other production having the starting symbol in its rhs.
+        if (singleProduction.getRightHandSideOfProduction().get(0) == "S")
+        {
+            //This is done horribly... fix later
+            return true;
+        }
+
+        //Case 1: Er = {e1, e2} where lab(e1), lab(e2) are in the set of NonTerminalLabels && mark(e1) =/= mark(e2)
+        if (singleProduction.getRightHandSideOfProduction().size() > 1 &&  nonTerminalLabels.contains(singleProduction.getRightHandSideOfProduction()) &&
+                singleProduction.getRightHandSideOfProduction().get(0) !=
+                        singleProduction.getRightHandSideOfProduction().get(1))
+        {
+            //This might not work - not sure if they are in wrong order (two edges) + really sloppy && statement
+            return true;
+        }
 
         return false;
     }
