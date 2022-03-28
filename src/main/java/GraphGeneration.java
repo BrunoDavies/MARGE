@@ -5,28 +5,49 @@ import java.util.List;
 public class GraphGeneration {
     private HyperedgeReplacementGrammar inputHRG;
     private int sizeOfGeneratedGraph;
-    private HashMap<String, ArrayList<Integer>> nonTerminalMatrix;
-    private HashMap<List<Object>, ArrayList<Integer>> productionMatrix;   //maybe make Production a class and then have that as key?
+    private int[][] nonTerminalMatrix;
+    private int[][] productionMatrix;
 
-    public GraphGeneration(HyperedgeReplacementGrammar inputHRG, int sizeOfGeneratedGraph,
-                           HashMap<String, ArrayList<Integer>> nonTerminalMatrix, HashMap<List<Object>, ArrayList<Integer>> productionMatrix) {
+    public GraphGeneration(HyperedgeReplacementGrammar inputHRG, int sizeOfGeneratedGraph) {
         this.inputHRG = inputHRG;
         this.sizeOfGeneratedGraph = sizeOfGeneratedGraph;
-        this.nonTerminalMatrix = nonTerminalMatrix;
-        this.productionMatrix = productionMatrix;
-
+        this.nonTerminalMatrix = new int[inputHRG.getNonTerminalLabels().size()][sizeOfGeneratedGraph];
+        this.nonTerminalMatrix = new int[inputHRG.getAllProductions().size()][sizeOfGeneratedGraph];
     }
 
-    public HashMap<String, ArrayList<Integer>> preProccessingPhaseNonTerminal(HyperedgeReplacementGrammar inputHRG,
-                                                                              int sizeOfGeneratedGraph) {
+    public void preProccessingPhase(int[][] nonTerminalMatrix, int[][] productionMatrix) {
+        //Step 1: init all values in matrices to 0 - already done when creating graphs
 
-        return null;
-    }
+        //Step 2: Sort out all terminal or single node possibilities
+        for (Production production : inputHRG.getAllProductions()) {
+            if (Character.isLowerCase(production.getRightHandSideOfProduction().get(0)) &&
+                    production.getRightHandSideOfProduction().size() == 1) {
+                productionMatrix[production.getProductionId()][production.getNumberOfInternalNodes() + 1] = 1;
+            }
 
-    public HashMap<List<Object>, ArrayList<Integer>> preProccessingPhaseProduction(HyperedgeReplacementGrammar inputHRG,
-                                                                                   int sizeOfGeneratedGraph) {
+            //TODO figure out what is meant by lamda in research paper
+            //if ()
+        }
 
-        return null;
+        //Step 3: Fill in main entries
+        for (int l = 0; l <= sizeOfGeneratedGraph; l++) {
+            for (String a : inputHRG.getNonTerminalLabels()) {
+                for (Production production : inputHRG.getAllProductions()) {
+                    nonTerminalMatrix[inputHRG.getNonTerminalLabels().indexOf(a)][l] +=
+                            productionMatrix[production.getProductionId()][l];
+                }
+            }
+            for (Production production : inputHRG.getNonTerminalProductions()) {
+                for (int k = 0; k < 1; k++) {
+                    productionMatrix[production.getProductionId()][l+production.getNumberOfInternalNodes()] +=
+                            nonTerminalMatrix[inputHRG.getNonTerminalLabels()
+                                    .indexOf(production.getRightHandSideOfProduction().get(0))][k] *
+                                    nonTerminalMatrix[inputHRG.getNonTerminalLabels()
+                                            .indexOf(production.getRightHandSideOfProduction().get(1))][l-k];
+                }
+            }
+        }
+
     }
 
     public HyperedgeReplacementGrammar getInputHRG() {
@@ -45,19 +66,19 @@ public class GraphGeneration {
         this.sizeOfGeneratedGraph = sizeOfGeneratedGraph;
     }
 
-    public HashMap<String, ArrayList<Integer>> getNonTerminalMatrix() {
+    public int[][] getNonTerminalMatrix() {
         return nonTerminalMatrix;
     }
 
-    public void setNonTerminalMatrix(HashMap<String, ArrayList<Integer>> nonTerminalMatrix) {
+    public void setNonTerminalMatrix(int[][] nonTerminalMatrix) {
         this.nonTerminalMatrix = nonTerminalMatrix;
     }
 
-    public HashMap<List<Object>, ArrayList<Integer>> getProductionMatrix() {
+    public int[][] getProductionMatrix() {
         return productionMatrix;
     }
 
-    public void setProductionMatrix(HashMap<List<Object>, ArrayList<Integer>> productionMatrix) {
+    public void setProductionMatrix(int[][] productionMatrix) {
         this.productionMatrix = productionMatrix;
     }
 

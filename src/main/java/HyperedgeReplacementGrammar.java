@@ -14,6 +14,8 @@ public class HyperedgeReplacementGrammar {
 
     private String startingSymbol; //Defined from non-terminal labels
 
+    private ArrayList<Production> nonTerminalProductions;
+
     //TODO Check if there are possible duplicate production ids? if no then this works
     //Just use index as production id.
 //    private HashMap<Integer, Production> mapBetweenProductionIdAndData = new HashMap<Integer, Production>();
@@ -29,7 +31,18 @@ public class HyperedgeReplacementGrammar {
         {
             throw new IllegalArgumentException("Invalid Grammar Input");
         }
+
+        collectNonTerminalProductions();
         
+    }
+
+    //TODO need to test
+    private void collectNonTerminalProductions() {
+        for (Production production : allProductions) {
+            if (production.getRightHandSideOfProduction().contains(nonTerminalLabels)) {
+                this.nonTerminalProductions.add(production);
+            }
+        }
     }
 
 
@@ -82,7 +95,7 @@ public class HyperedgeReplacementGrammar {
 
         //Case 4: A=S, p is the empty production and for each q in P, for each e in rhs(q), lab(2) =/= S. This says that
         // the empty production is only allowed if there is no other production having the starting symbol in its rhs.
-        if (singleProduction.getRightHandSideOfProduction().get(0) == "S")
+        if (Character.toString(singleProduction.getRightHandSideOfProduction().indexOf(0)) == "S")
         {
             //This is done horribly... fix later
             return true;
@@ -99,6 +112,8 @@ public class HyperedgeReplacementGrammar {
 
         return false;
     }
+
+
 
     //TODO write test
     private boolean checkIntersectionIsEmpty(ArrayList<String> nonTerminalLabels, ArrayList<String> terminalLabels) {
@@ -150,4 +165,11 @@ public class HyperedgeReplacementGrammar {
         this.allProductions = allProductions;
     }
 
+    public ArrayList<Production> getNonTerminalProductions() {
+        return nonTerminalProductions;
+    }
+
+    public void setNonTerminalProductions(ArrayList<Production> nonTerminalProductions) {
+        this.nonTerminalProductions = nonTerminalProductions;
+    }
 }
