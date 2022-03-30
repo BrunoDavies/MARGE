@@ -19,8 +19,9 @@ public class GraphGeneration {
         //Step 1: init all values in matrices to 0 - already done when creating graphs
 
         //Step 2: Sort out all terminal or single node possibilities
+        ArrayList<String> inputHRGTerminalLabels = inputHRG.getTerminalLabels();
         for (Production production : inputHRG.getAllProductions()) {
-            if (Character.isLowerCase(production.getRightHandSideOfProduction().get(0)) &&
+            if (inputHRGTerminalLabels.contains(production.getRightHandSideOfProduction().get(0)) &&
                     production.getRightHandSideOfProduction().size() == 1) {
                 productionMatrix[production.getProductionId()][production.getNumberOfInternalNodes() + 1] = 1;
             }

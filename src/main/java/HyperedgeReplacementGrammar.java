@@ -39,7 +39,7 @@ public class HyperedgeReplacementGrammar {
     //TODO need to test
     private void collectNonTerminalProductions() {
         for (Production production : allProductions) {
-            if (production.getRightHandSideOfProduction().contains(nonTerminalLabels)) {
+            if (production.getRightHandSideOfProduction().containsAll(nonTerminalLabels)) {
                 this.nonTerminalProductions.add(production);
             }
         }
@@ -62,6 +62,7 @@ public class HyperedgeReplacementGrammar {
         {
             return true;
         } else {
+            System.out.println("f");
             return false;
         }
     }
@@ -95,17 +96,17 @@ public class HyperedgeReplacementGrammar {
 
         //Case 4: A=S, p is the empty production and for each q in P, for each e in rhs(q), lab(2) =/= S. This says that
         // the empty production is only allowed if there is no other production having the starting symbol in its rhs.
-        if (Character.toString(singleProduction.getRightHandSideOfProduction().indexOf(0)) == "S")
+        if (singleProduction.getRightHandSideOfProduction().indexOf(0) == 'S')
         {
             //This is done horribly... fix later
             return true;
         }
 
         //Case 1: Er = {e1, e2} where lab(e1), lab(e2) are in the set of NonTerminalLabels && mark(e1) =/= mark(e2)
-        if (singleProduction.getRightHandSideOfProduction().size() > 1 &&  nonTerminalLabels.contains(singleProduction.getRightHandSideOfProduction()) &&
+        if (singleProduction.getRightHandSideOfProduction().size() > 1 &&
+                nonTerminalLabels.containsAll(singleProduction.getRightHandSideOfProduction()) &&
                 singleProduction.getRightHandSideOfProduction().get(0) !=
-                        singleProduction.getRightHandSideOfProduction().get(1))
-        {
+                        singleProduction.getRightHandSideOfProduction().get(1)) {
             //This might not work - not sure if they are in wrong order (two edges) + really sloppy && statement
             return true;
         }

@@ -4,11 +4,11 @@ public class Production {
     private String leftHandSideOfProduction;
     //Might not need
     private int productionId;
-    private ArrayList<Character> rightHandSideOfProduction;
+    private ArrayList<String> rightHandSideOfProduction;
     private Hypergraph rightHandSideHypergraph;
     private int numberOfInternalNodes;
 
-    public Production(String leftHandSideOfProduction, int productionId, ArrayList<Character> rightHandSideOfProduction,
+    public Production(String leftHandSideOfProduction, int productionId, ArrayList<String> rightHandSideOfProduction,
                       Hypergraph productionHypergraph, int numberOfRegNodes) {
         this.leftHandSideOfProduction = leftHandSideOfProduction;
         this.productionId = productionId;
@@ -33,11 +33,11 @@ public class Production {
         this.productionId = productionId;
     }
 
-    public ArrayList<Character> getRightHandSideOfProduction() {
+    public ArrayList<String> getRightHandSideOfProduction() {
         return rightHandSideOfProduction;
     }
 
-    public void setRightHandSideOfProduction(ArrayList<Character> rightHandSideOfProduction) {
+    public void setRightHandSideOfProduction(ArrayList<String> rightHandSideOfProduction) {
         this.rightHandSideOfProduction = rightHandSideOfProduction;
     }
 

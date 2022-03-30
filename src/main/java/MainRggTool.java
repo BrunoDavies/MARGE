@@ -8,4 +8,8 @@ public class MainRggTool {
         //Step 4.2: Generation phase uses those and other things to find the "order" of productions and onto what
         //Step 4.3: Pass these onto a function which executes those.
     //Return the hypergraph to user - maybe with explanation of what went down?
+
+
+    public MainRggTool() {
+    }
 }
