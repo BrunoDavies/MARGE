@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -14,7 +15,7 @@ public class HyperedgeReplacementGrammar {
 
     private String startingSymbol; //Defined from non-terminal labels
 
-    private ArrayList<Production> nonTerminalProductions;
+    private ArrayList<Production> nonTerminalProductions = new ArrayList<>();
 
     //TODO Check if there are possible duplicate production ids? if no then this works
     //Just use index as production id.
@@ -39,7 +40,7 @@ public class HyperedgeReplacementGrammar {
     //TODO need to test
     private void collectNonTerminalProductions() {
         for (Production production : allProductions) {
-            if (production.getRightHandSideOfProduction().containsAll(nonTerminalLabels)) {
+            if (!Collections.disjoint(production.getRightHandSideOfProduction(), nonTerminalLabels)) {
                 this.nonTerminalProductions.add(production);
             }
         }
@@ -62,7 +63,6 @@ public class HyperedgeReplacementGrammar {
         {
             return true;
         } else {
-            System.out.println("f");
             return false;
         }
     }
