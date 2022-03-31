@@ -10,7 +10,7 @@ public class HyperedgeReplacementGrammar {
     //Stack for productions.
     // ArrayList<String> productionLHS = new ArrayList<>();
     // Hypergraph productionRHS = new Hypergraph();
-    private List<Production> allProductions; //Add a arraylist with lhs, production id, rhs, and indicator of terminal production
+    private ArrayList<Production> allProductions; //Add a arraylist with lhs, production id, rhs, and indicator of terminal production
     //Individual production format: {String, String, Hypergraph, Int}
 
     private String startingSymbol; //Defined from non-terminal labels
@@ -22,7 +22,7 @@ public class HyperedgeReplacementGrammar {
 //    private HashMap<Integer, Production> mapBetweenProductionIdAndData = new HashMap<Integer, Production>();
 
     public HyperedgeReplacementGrammar(ArrayList<String> nonTerminalLabels, ArrayList<String> terminalLabels,
-                                       List<Production> allProductions, String startingSymbol) {
+                                       ArrayList<Production> allProductions, String startingSymbol) {
         this.nonTerminalLabels = nonTerminalLabels;
         this.terminalLabels = terminalLabels;
         this.allProductions = allProductions;
@@ -34,7 +34,6 @@ public class HyperedgeReplacementGrammar {
         }
 
         collectNonTerminalProductions();
-        
     }
 
     //TODO need to test
@@ -89,7 +88,7 @@ public class HyperedgeReplacementGrammar {
 
         //Case 2: Er = {e1} where lab(e1} in set of TerminalLabels and mark(e1) = alpha (isolated node I think?)
         if (singleProduction.getRightHandSideOfProduction().size() == 1 &&
-                terminalLabels.contains(singleProduction.getRightHandSideOfProduction()))
+                terminalLabels.containsAll(singleProduction.getRightHandSideOfProduction()))
         {
             return true;
         }
@@ -162,7 +161,7 @@ public class HyperedgeReplacementGrammar {
         return allProductions;
     }
 
-    public void setAllProductions(List<Production> allProductions) {
+    public void setAllProductions(ArrayList<Production> allProductions) {
         this.allProductions = allProductions;
     }
 
