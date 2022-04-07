@@ -157,7 +157,7 @@ public class HyperedgeReplacementGrammar {
         this.startingSymbol = startingSymbol;
     }
 
-    public List<Production> getAllProductions() {
+    public ArrayList<Production> getAllProductions() {
         return allProductions;
     }
 

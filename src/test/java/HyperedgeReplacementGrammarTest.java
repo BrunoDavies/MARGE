@@ -31,6 +31,7 @@ class HyperedgeReplacementGrammarTest {
             testAllProductions, testStartingSymbol);
 
     HyperedgeReplacementGrammar testHRG;
+
     @BeforeEach
     void setUp() {
         System.out.println("Setting up before test...");
@@ -95,6 +96,24 @@ class HyperedgeReplacementGrammarTest {
             HyperedgeReplacementGrammar invalidHRG = new HyperedgeReplacementGrammar(testNonTerminalLabels,
                     testTerminalLabels, invalidProductionList, "S");
         });
+    }
+
+    @Test
+    void emptyProductionIsValid(){
+        ArrayList<String> emptyRHS= new ArrayList<>();
+        Production emptyProduction = new Production("F", 1, emptyRHS,
+                 null, 0);
+        ArrayList<Production> invalidProductionList = new ArrayList<>(Arrays.asList(emptyProduction));
+        HyperedgeReplacementGrammar emptyProductionHRG = new HyperedgeReplacementGrammar(testNonTerminalLabels,
+                testTerminalLabels, invalidProductionList, testStartingSymbol);
+
+        assertTrue(emptyProductionHRG.getAllProductions().get(0).getRightHandSideOfProduction().isEmpty());
+    }
+
+    //TODO Finish this off
+    @Test
+    void productionCase4() {
+
     }
 
 }

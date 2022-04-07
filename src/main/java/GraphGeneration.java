@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -15,15 +16,17 @@ public class GraphGeneration {
         this.nonTerminalMatrix = new int[inputHRG.getAllProductions().size()][sizeOfGeneratedGraph];
     }
 
-    public void preProccessingPhase(int[][] nonTerminalMatrix, int[][] productionMatrix) {
+    public void preProccessingPhase() {
         //Step 1: init all values in matrices to 0 - already done when creating graphs
+        nonTerminalMatrix = new int[inputHRG.getNonTerminalLabels().size()][sizeOfGeneratedGraph];
+        productionMatrix = new int[inputHRG.getAllProductions().size()][sizeOfGeneratedGraph];
 
         //Step 2: Sort out all terminal or single node possibilities
         ArrayList<String> inputHRGTerminalLabels = inputHRG.getTerminalLabels();
         for (Production production : inputHRG.getAllProductions()) {
             if (inputHRGTerminalLabels.contains(production.getRightHandSideOfProduction().get(0)) &&
                     production.getRightHandSideOfProduction().size() == 1) {
-                productionMatrix[production.getProductionId()][production.getNumberOfInternalNodes() + 1] = 1;
+                productionMatrix[production.getProductionId() - 1][production.getNumberOfInternalNodes()] = 1;
             }
 
             //TODO figure out what is meant by lamda in research paper
@@ -31,24 +34,32 @@ public class GraphGeneration {
         }
 
         //Step 3: Fill in main entries
-        for (int l = 0; l <= sizeOfGeneratedGraph; l++) {
+        for (int graphSize = 0; graphSize <= sizeOfGeneratedGraph - 1; graphSize++) {
             for (String a : inputHRG.getNonTerminalLabels()) {
                 for (Production production : inputHRG.getAllProductions()) {
-                    nonTerminalMatrix[inputHRG.getNonTerminalLabels().indexOf(a)][l] +=
-                            productionMatrix[production.getProductionId()][l];
+                    if (a == production.getLeftHandSideOfProduction()) {
+                        nonTerminalMatrix[inputHRG.getNonTerminalLabels().indexOf(a)][graphSize] +=
+                                productionMatrix[production.getProductionId() - 1][graphSize];
+                    }
                 }
             }
             for (Production production : inputHRG.getNonTerminalProductions()) {
-                for (int k = 0; k < 1; k++) {
-                    productionMatrix[production.getProductionId()][l+production.getNumberOfInternalNodes()] +=
-                            nonTerminalMatrix[inputHRG.getNonTerminalLabels()
-                                    .indexOf(production.getRightHandSideOfProduction().get(0))][k] *
-                                    nonTerminalMatrix[inputHRG.getNonTerminalLabels()
-                                            .indexOf(production.getRightHandSideOfProduction().get(1))][l-k];
+                for (int k = 0; k <= graphSize; k++) {
+                    try {
+                        productionMatrix[production.getProductionId() - 1][graphSize + production.getNumberOfInternalNodes() + 1] +=
+                                nonTerminalMatrix[inputHRG.getNonTerminalLabels()
+                                        .indexOf(production.getRightHandSideOfProduction().get(0))][k] *
+                                        nonTerminalMatrix[inputHRG.getNonTerminalLabels()
+                                                .indexOf(production.getRightHandSideOfProduction().get(1))][graphSize - k];
+                    } catch (ArrayIndexOutOfBoundsException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
+            System.out.println(Arrays.deepToString(nonTerminalMatrix));
+            System.out.println(Arrays.deepToString(productionMatrix));
+            System.out.println(graphSize);
         }
-
     }
 
     public HyperedgeReplacementGrammar getInputHRG() {
