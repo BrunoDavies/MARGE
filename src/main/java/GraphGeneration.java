@@ -34,31 +34,26 @@ public class GraphGeneration {
         }
 
         //Step 3: Fill in main entries
-        for (int graphSize = 0; graphSize <= sizeOfGeneratedGraph - 1; graphSize++) {
+        for (int graphSize = 1; graphSize <= sizeOfGeneratedGraph; graphSize++) {
             for (String a : inputHRG.getNonTerminalLabels()) {
                 for (Production production : inputHRG.getAllProductions()) {
                     if (a == production.getLeftHandSideOfProduction()) {
-                        nonTerminalMatrix[inputHRG.getNonTerminalLabels().indexOf(a)][graphSize] +=
-                                productionMatrix[production.getProductionId() - 1][graphSize];
+                        nonTerminalMatrix[inputHRG.getNonTerminalLabels().indexOf(a)][graphSize - 1] +=
+                                productionMatrix[production.getProductionId() - 1][graphSize - 1];
                     }
                 }
             }
             for (Production production : inputHRG.getNonTerminalProductions()) {
-                for (int k = 0; k <= graphSize; k++) {
-                    try {
-                        productionMatrix[production.getProductionId() - 1][graphSize + production.getNumberOfInternalNodes() + 1] +=
+                for (int k = 1; k <= graphSize; k++) {
+                    if (graphSize + production.getNumberOfInternalNodes() <= sizeOfGeneratedGraph - 1) {
+                        productionMatrix[production.getProductionId() - 1][graphSize + production.getNumberOfInternalNodes()] +=
                                 nonTerminalMatrix[inputHRG.getNonTerminalLabels()
-                                        .indexOf(production.getRightHandSideOfProduction().get(0))][k] *
+                                        .indexOf(production.getRightHandSideOfProduction().get(0))][k - 1] *
                                         nonTerminalMatrix[inputHRG.getNonTerminalLabels()
-                                                .indexOf(production.getRightHandSideOfProduction().get(1))][graphSize - k];
-                    } catch (ArrayIndexOutOfBoundsException e) {
-                        e.printStackTrace();
+                                                .indexOf(production.getRightHandSideOfProduction().get(1))][(graphSize - k)];
                     }
                 }
             }
-            System.out.println(Arrays.deepToString(nonTerminalMatrix));
-            System.out.println(Arrays.deepToString(productionMatrix));
-            System.out.println(graphSize);
         }
     }
 
