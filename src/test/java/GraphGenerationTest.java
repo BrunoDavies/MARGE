@@ -70,6 +70,10 @@ class GraphGenerationTest {
                                                                 {1, 0, 0, 0, 0, 0, 0}, {0, 0, 2, 0 , 6, 0, 22},
                                                                     {1, 0, 0, 0, 0, 0, 0}};
 
+    //Correct Production order for generation phase
+    private ArrayList<Production> orderOfProductions = new ArrayList<>(Arrays.asList(productionP1, productionP4,
+                                                                            productionP6, productionP7, productionP5));
+
 
     @BeforeEach
     void setUp() {
@@ -98,5 +102,12 @@ class GraphGenerationTest {
     void testPreProcessingPhaseProductionMatrix() {
         testGraphGeneration.preProccessingPhase();
         assertArrayEquals(testProductionMatrix, testGraphGeneration.getProductionMatrix());
+    }
+
+    @Test
+    void testGenerationPhase() {
+        testGraphGeneration.preProccessingPhase();
+        testGraphGeneration.generationPhase();
+        assertEquals(orderOfProductions, testGraphGeneration.getProductionExecutionOrder());
     }
 }

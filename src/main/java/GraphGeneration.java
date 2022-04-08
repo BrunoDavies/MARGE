@@ -1,13 +1,15 @@
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
+import java.util.stream.IntStream;
 
 public class GraphGeneration {
     private HyperedgeReplacementGrammar inputHRG;
     private int sizeOfGeneratedGraph;
     private int[][] nonTerminalMatrix;
     private int[][] productionMatrix;
+    private ArrayList<Production> productionExecutionOrder = new ArrayList<>();
 
     public GraphGeneration(HyperedgeReplacementGrammar inputHRG, int sizeOfGeneratedGraph) {
         this.inputHRG = inputHRG;
@@ -57,6 +59,75 @@ public class GraphGeneration {
         }
     }
 
+    public void generationPhase() {
+        int graphLength = sizeOfGeneratedGraph - inputHRG.getProductionWithLHS(inputHRG.getStartingSymbol()).size();
+
+        if (nonTerminalMatrix[inputHRG.getNonTerminalLabels().indexOf(inputHRG.getStartingSymbol())][graphLength] == 0){
+            throw new IllegalArgumentException("There are no possible derivations");
+        }
+
+        productionExecutionOrder = deriveHypergraph(inputHRG.getStartingSymbol(), graphLength, productionExecutionOrder);
+    }
+
+    private ArrayList<Production> deriveHypergraph(String symbol, int graphLength,
+                                                   ArrayList<Production> productionExecutionOrder) {
+        Production randomProduction = generationPhaseRandomProduction(symbol, graphLength);
+
+        if (!inputHRG.getNonTerminalProductions().contains(randomProduction)){
+            productionExecutionOrder.add(randomProduction);
+        }
+        
+        else {
+            //Find a better name
+            productionExecutionOrder.add(randomProduction);
+            int newGraphLength = graphLength - randomProduction.getNumberOfInternalNodes();
+            int randomNonTerminalVariation = generationPhaseRandomNonTerminal(randomProduction, newGraphLength, graphLength);
+            //"B" Label
+            productionExecutionOrder = deriveHypergraph(randomProduction.getRightHandSideOfProduction().get(0),
+                    randomNonTerminalVariation, productionExecutionOrder);
+
+            //"C" Label
+            productionExecutionOrder = deriveHypergraph(randomProduction.getRightHandSideOfProduction().get(1),
+                    newGraphLength - randomNonTerminalVariation, productionExecutionOrder);
+        }
+        
+        return productionExecutionOrder;
+    }
+
+    private int generationPhaseRandomNonTerminal(Production randomProduction, int newGraphLength, int graphLength) {
+        ArrayList<Integer> allPossibleKValues = new ArrayList<>();
+        for (int k = 1; k < newGraphLength; k++) {
+            int currentPosibility = nonTerminalMatrix[inputHRG.getNonTerminalLabels().indexOf(
+                                        randomProduction.getRightHandSideOfProduction().get(0))][k-1] *
+                                    nonTerminalMatrix[inputHRG.getNonTerminalLabels().indexOf(
+                                            randomProduction.getRightHandSideOfProduction().get(1))][newGraphLength - k - 1];
+
+            if (currentPosibility != 0) {
+                for (int i = 0; i < currentPosibility; i++) {
+                    allPossibleKValues.add(k);
+                }
+            }
+        }
+        Random rand = new Random();
+        return allPossibleKValues.get(rand.nextInt(allPossibleKValues.size()));
+
+
+    }
+
+    private Production generationPhaseRandomProduction(String symbol, int graphLength) {
+        List<Integer> listOfProductionId = new ArrayList<>();
+
+        for (Production p : inputHRG.getProductionWithLHS(symbol)) {
+            for (int i = 0; i < productionMatrix[p.getProductionId() -1][graphLength - 1]; i++) {
+                listOfProductionId.add(p.getProductionId());
+            }
+        }
+        Random rand = new Random();
+        int randomProductionId = listOfProductionId.get(rand.nextInt(listOfProductionId.size()));
+
+        return inputHRG.getAllProductions().get(randomProductionId - 1);
+    }
+
     public HyperedgeReplacementGrammar getInputHRG() {
         return inputHRG;
     }
@@ -87,6 +158,14 @@ public class GraphGeneration {
 
     public void setProductionMatrix(int[][] productionMatrix) {
         this.productionMatrix = productionMatrix;
+    }
+
+    public ArrayList<Production> getProductionExecutionOrder() {
+        return productionExecutionOrder;
+    }
+
+    public void setProductionExecutionOrder(ArrayList<Production> productionExecutionOrder) {
+        this.productionExecutionOrder = productionExecutionOrder;
     }
 
     //For the gen phase: collect all the production identities in order of execution - see paper for example - and

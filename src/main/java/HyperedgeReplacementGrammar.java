@@ -11,15 +11,10 @@ public class HyperedgeReplacementGrammar {
     // ArrayList<String> productionLHS = new ArrayList<>();
     // Hypergraph productionRHS = new Hypergraph();
     private ArrayList<Production> allProductions; //Add a arraylist with lhs, production id, rhs, and indicator of terminal production
-    //Individual production format: {String, String, Hypergraph, Int}
 
     private String startingSymbol; //Defined from non-terminal labels
 
     private ArrayList<Production> nonTerminalProductions = new ArrayList<>();
-
-    //TODO Check if there are possible duplicate production ids? if no then this works
-    //Just use index as production id.
-//    private HashMap<Integer, Production> mapBetweenProductionIdAndData = new HashMap<Integer, Production>();
 
     public HyperedgeReplacementGrammar(ArrayList<String> nonTerminalLabels, ArrayList<String> terminalLabels,
                                        ArrayList<Production> allProductions, String startingSymbol) {
@@ -36,7 +31,6 @@ public class HyperedgeReplacementGrammar {
         collectNonTerminalProductions();
     }
 
-    //TODO need to test
     private void collectNonTerminalProductions() {
         for (Production production : allProductions) {
             if (!Collections.disjoint(production.getRightHandSideOfProduction(), nonTerminalLabels)) {
@@ -46,7 +40,6 @@ public class HyperedgeReplacementGrammar {
     }
 
 
-    //TODO write test
     private boolean validHRG() {
         boolean nonTerminalLabelFinite = Double.isFinite(nonTerminalLabels.size());
         boolean terminalLabelFinite = Double.isFinite(terminalLabels.size());
@@ -66,7 +59,17 @@ public class HyperedgeReplacementGrammar {
         }
     }
 
-    //TODO write test
+    public ArrayList<Production> getProductionWithLHS(String label) {
+        ArrayList<Production> productionsWithLHS = new ArrayList<>();
+        for (Production production : allProductions) {
+            if (production.getLeftHandSideOfProduction() == label) {
+                productionsWithLHS.add(production);
+            }
+        }
+        return productionsWithLHS;
+    }
+
+
     private boolean allProductionValid(List<Production> allProductions) {
         for (Production singleProduction : allProductions) {
             if (!singleProductionValid(singleProduction))
@@ -113,9 +116,6 @@ public class HyperedgeReplacementGrammar {
         return false;
     }
 
-
-
-    //TODO write test
     private boolean checkIntersectionIsEmpty(ArrayList<String> nonTerminalLabels, ArrayList<String> terminalLabels) {
         List<String> intersectionElements = new ArrayList<String>();
 

@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class Hypergraph {
     //TODO look into using frobenius normal form for node and vertex representation. Might limit manipulation
@@ -8,16 +9,20 @@ public class Hypergraph {
     private ArrayList<Integer> edges;
     private ArrayList<String> labels;
     private HashMap<Integer, Integer> attributes;   //edge -> node
-    private HashMap<String, Integer> labelEdgeMapping;  //label -> edge
+    private HashMap<String, List<Integer>> labelEdgeMapping;  //label -> edge
     private ArrayList<Integer> externalNodes;
 
-    public Hypergraph(ArrayList<Integer> nodes, ArrayList<Integer> edges, ArrayList<String> labels, HashMap<Integer, Integer> attributes, HashMap<String, Integer> labelEdgeMapping, ArrayList<Integer> externalNodes) {
+    public Hypergraph(ArrayList<Integer> nodes, ArrayList<Integer> edges, ArrayList<String> labels, HashMap<Integer, Integer> attributes, HashMap<String, List<Integer>> labelEdgeMapping, ArrayList<Integer> externalNodes) {
         this.nodes = nodes;
         this.edges = edges;
         this.labels = labels;
         this.attributes = attributes;
         this.labelEdgeMapping = labelEdgeMapping;
         this.externalNodes = externalNodes;
+    }
+
+    public int edgeType(String edge) {
+        return labelEdgeMapping.get(edge).size();
     }
 
     public ArrayList<Integer> getNodes() {
@@ -52,11 +57,11 @@ public class Hypergraph {
         this.attributes = attributes;
     }
 
-    public HashMap<String, Integer> getLabelEdgeMapping() {
+    public HashMap<String, List<Integer>> getLabelEdgeMapping() {
         return labelEdgeMapping;
     }
 
-    public void setLabelEdgeMapping(HashMap<String, Integer> labelEdgeMapping) {
+    public void setLabelEdgeMapping(HashMap<String, List<Integer>> labelEdgeMapping) {
         this.labelEdgeMapping = labelEdgeMapping;
     }
 
