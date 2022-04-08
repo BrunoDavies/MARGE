@@ -39,7 +39,6 @@ public class HyperedgeReplacementGrammar {
         }
     }
 
-
     private boolean validHRG() {
         boolean nonTerminalLabelFinite = Double.isFinite(nonTerminalLabels.size());
         boolean terminalLabelFinite = Double.isFinite(terminalLabels.size());
@@ -77,7 +76,6 @@ public class HyperedgeReplacementGrammar {
         //Case 3: Er = Empty set, |Vr| > |extR| - meaning we consider all terminal productions
         if (singleProduction.getRightHandSideOfProduction().isEmpty())
         {
-            //Might not need to check |Vr| > |extR|
             return true;
         }
 

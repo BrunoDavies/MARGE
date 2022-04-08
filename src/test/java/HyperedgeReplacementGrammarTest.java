@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -17,7 +16,7 @@ class HyperedgeReplacementGrammarTest {
     private ArrayList<String> p1CharList = new ArrayList<>(Arrays.asList("C", "D"));
     private Production productionP1 = new Production("S", 1, p1CharList,
             null, 1);
-    private Production p2 = new Production("S", 2, p1CharList,
+    private Production productionP2 = new Production("S", 2, p1CharList,
             null, 0);
 
     private ArrayList<Production> testAllProductions = new ArrayList<>(Arrays.asList(productionP1));
@@ -72,13 +71,12 @@ class HyperedgeReplacementGrammarTest {
     }
 
     @Test
-    void collectNonTerminalProductionsNoNonTerminal(){
+    void multipleNonTerminalProductionsAreAddedToNTList(){
         ArrayList<String> terminalRHS = new ArrayList<>(Arrays.asList("c"));
-        Production terminalProduction = new Production("C", 3, terminalRHS,
-                null, 0);
+        Production terminalProduction = new Production("C", 3, terminalRHS, null, 0);
         ArrayList<Production> onlyTerminalProductions = new ArrayList<>();
         onlyTerminalProductions.add(productionP1);
-        onlyTerminalProductions.add(p2);
+        onlyTerminalProductions.add(productionP2);
         onlyTerminalProductions.add(terminalProduction);
 
         HyperedgeReplacementGrammar testHRG = new HyperedgeReplacementGrammar(testNonTerminalLabels, testTerminalLabels,
@@ -86,7 +84,7 @@ class HyperedgeReplacementGrammarTest {
                 testStartingSymbol);
 
         assertEquals(productionP1, testHRG.getNonTerminalProductions().get(0));
-        assertEquals(p2, testHRG.getNonTerminalProductions().get(1));
+        assertEquals(productionP2, testHRG.getNonTerminalProductions().get(1));
     }
 
     @Test
@@ -112,7 +110,7 @@ class HyperedgeReplacementGrammarTest {
 
     //TODO Finish this off
     @Test
-    void productionCase4() {
+    void production() {
 
     }
 
