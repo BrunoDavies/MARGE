@@ -63,8 +63,12 @@ class GraphGenerationTest {
 
 
     //Correct Matrices
-    private int[][] testNonTerminalMatrix = new int[][]{ {0, 2, 2, 6, 6, 22, 22}, {2, 0, 2, 0, 6, 0, 22}, {1, 0, 2, 0, 6, 0, 22} };
-    private int[][] testProductionMatrix;
+    private int[][] testNonTerminalMatrix = new int[][]{ {0, 2, 2, 6, 6, 22, 22}, {2, 0, 2, 0, 6, 0, 22},
+                                                            {1, 0, 2, 0, 6, 0, 22} };
+    private int[][] testProductionMatrix = new int[][] { {0, 0, 2, 0 , 6, 0, 22}, {0, 2, 0, 6, 0, 22, 0},
+                                                            {0, 0, 2, 0 , 6, 0, 22}, {1, 0, 0, 0, 0, 0, 0},
+                                                                {1, 0, 0, 0, 0, 0, 0}, {0, 0, 2, 0 , 6, 0, 22},
+                                                                    {1, 0, 0, 0, 0, 0, 0}};
 
 
     @BeforeEach
@@ -85,9 +89,14 @@ class GraphGenerationTest {
     }
 
     @Test
-    void testPreGenNonTerminalMatrix() {
+    void testPreProcessingPhaseNonTerminalMatrix() {
         testGraphGeneration.preProccessingPhase();
-//        assertEquals(Arrays.deepEquals(testNonTerminalMatrix, testGraphGeneration.getNonTerminalMatrix()));
         assertArrayEquals(testNonTerminalMatrix, testGraphGeneration.getNonTerminalMatrix());
+    }
+
+    @Test
+    void testPreProcessingPhaseProductionMatrix() {
+        testGraphGeneration.preProccessingPhase();
+        assertArrayEquals(testProductionMatrix, testGraphGeneration.getProductionMatrix());
     }
 }
