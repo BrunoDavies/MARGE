@@ -94,19 +94,19 @@ class GraphGenerationTest {
 
     @Test
     void testPreProcessingPhaseNonTerminalMatrix() {
-        testGraphGeneration.preProccessingPhase();
+        testGraphGeneration.preProcessingPhase();
         assertArrayEquals(testNonTerminalMatrix, testGraphGeneration.getNonTerminalMatrix());
     }
 
     @Test
     void testPreProcessingPhaseProductionMatrix() {
-        testGraphGeneration.preProccessingPhase();
+        testGraphGeneration.preProcessingPhase();
         assertArrayEquals(testProductionMatrix, testGraphGeneration.getProductionMatrix());
     }
 
     @Test
     void testGenerationPhase() {
-        testGraphGeneration.preProccessingPhase();
+        testGraphGeneration.preProcessingPhase();
         testGraphGeneration.generationPhase();
         assertEquals(orderOfProductions, testGraphGeneration.getProductionExecutionOrder());
     }

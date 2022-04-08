@@ -3,8 +3,6 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Hypergraph {
-    //TODO look into using frobenius normal form for node and vertex representation. Might limit manipulation
-
     private ArrayList<Integer> nodes;
     private ArrayList<Integer> edges;
     private ArrayList<String> labels;
@@ -12,7 +10,8 @@ public class Hypergraph {
     private HashMap<String, List<Integer>> labelEdgeMapping;  //label -> edge
     private ArrayList<Integer> externalNodes;
 
-    public Hypergraph(ArrayList<Integer> nodes, ArrayList<Integer> edges, ArrayList<String> labels, HashMap<Integer, Integer> attributes, HashMap<String, List<Integer>> labelEdgeMapping, ArrayList<Integer> externalNodes) {
+    public Hypergraph(ArrayList<Integer> nodes, ArrayList<Integer> edges, ArrayList<String> labels, HashMap<Integer,
+            Integer> attributes, HashMap<String, List<Integer>> labelEdgeMapping, ArrayList<Integer> externalNodes) {
         this.nodes = nodes;
         this.edges = edges;
         this.labels = labels;

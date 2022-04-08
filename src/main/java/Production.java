@@ -2,7 +2,6 @@ import java.util.ArrayList;
 
 public class Production {
     private String leftHandSideOfProduction;
-    //Might not need
     private int productionId;
     private ArrayList<String> rightHandSideOfProduction;
     private Hypergraph rightHandSideHypergraph;

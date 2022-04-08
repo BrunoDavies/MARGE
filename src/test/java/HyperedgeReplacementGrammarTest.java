@@ -81,12 +81,12 @@ class HyperedgeReplacementGrammarTest {
         onlyTerminalProductions.add(p2);
         onlyTerminalProductions.add(terminalProduction);
 
-        HyperedgeReplacementGrammar plsWork = new HyperedgeReplacementGrammar(testNonTerminalLabels, testTerminalLabels,
+        HyperedgeReplacementGrammar testHRG = new HyperedgeReplacementGrammar(testNonTerminalLabels, testTerminalLabels,
                 onlyTerminalProductions,
                 testStartingSymbol);
 
-        assertEquals(productionP1, plsWork.getNonTerminalProductions().get(0));
-        assertEquals(p2, plsWork.getNonTerminalProductions().get(1));
+        assertEquals(productionP1, testHRG.getNonTerminalProductions().get(0));
+        assertEquals(p2, testHRG.getNonTerminalProductions().get(1));
     }
 
     @Test

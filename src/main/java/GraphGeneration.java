@@ -1,8 +1,6 @@
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.IntStream;
 
 public class GraphGeneration {
     private HyperedgeReplacementGrammar inputHRG;
@@ -18,7 +16,7 @@ public class GraphGeneration {
         this.nonTerminalMatrix = new int[inputHRG.getAllProductions().size()][sizeOfGeneratedGraph];
     }
 
-    public void preProccessingPhase() {
+    public void preProcessingPhase() {
         //Step 1: init all values in matrices to 0 - already done when creating graphs
         nonTerminalMatrix = new int[inputHRG.getNonTerminalLabels().size()][sizeOfGeneratedGraph];
         productionMatrix = new int[inputHRG.getAllProductions().size()][sizeOfGeneratedGraph];
@@ -78,10 +76,10 @@ public class GraphGeneration {
         }
         
         else {
-            //Find a better name
             productionExecutionOrder.add(randomProduction);
             int newGraphLength = graphLength - randomProduction.getNumberOfInternalNodes();
             int randomNonTerminalVariation = generationPhaseRandomNonTerminal(randomProduction, newGraphLength, graphLength);
+
             //"B" Label
             productionExecutionOrder = deriveHypergraph(randomProduction.getRightHandSideOfProduction().get(0),
                     randomNonTerminalVariation, productionExecutionOrder);
@@ -97,13 +95,13 @@ public class GraphGeneration {
     private int generationPhaseRandomNonTerminal(Production randomProduction, int newGraphLength, int graphLength) {
         ArrayList<Integer> allPossibleKValues = new ArrayList<>();
         for (int k = 1; k < newGraphLength; k++) {
-            int currentPosibility = nonTerminalMatrix[inputHRG.getNonTerminalLabels().indexOf(
+            int currentPossibility = nonTerminalMatrix[inputHRG.getNonTerminalLabels().indexOf(
                                         randomProduction.getRightHandSideOfProduction().get(0))][k-1] *
                                     nonTerminalMatrix[inputHRG.getNonTerminalLabels().indexOf(
                                             randomProduction.getRightHandSideOfProduction().get(1))][newGraphLength - k - 1];
 
-            if (currentPosibility != 0) {
-                for (int i = 0; i < currentPosibility; i++) {
+            if (currentPossibility != 0) {
+                for (int i = 0; i < currentPossibility; i++) {
                     allPossibleKValues.add(k);
                 }
             }
@@ -167,9 +165,4 @@ public class GraphGeneration {
     public void setProductionExecutionOrder(ArrayList<Production> productionExecutionOrder) {
         this.productionExecutionOrder = productionExecutionOrder;
     }
-
-    //For the gen phase: collect all the production identities in order of execution - see paper for example - and
-    // execute that separately (maybe, could be too big when doing graphs of size > 100,000
-
-
 }

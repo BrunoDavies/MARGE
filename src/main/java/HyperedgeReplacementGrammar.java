@@ -49,14 +49,8 @@ public class HyperedgeReplacementGrammar {
         boolean startIsInNonTerminal = nonTerminalLabels.contains(startingSymbol);
         boolean allProductionsValid = allProductionValid(allProductions);
 
-        //maybe a cleaner way to do this
-        if (nonTerminalLabelFinite && terminalLabelFinite && intersectionOfNonTerminalAndTerminal && startIsInNonTerminal
-                && allProductionsValid)
-        {
-            return true;
-        } else {
-            return false;
-        }
+        return (nonTerminalLabelFinite && terminalLabelFinite && intersectionOfNonTerminalAndTerminal && startIsInNonTerminal
+                && allProductionsValid);
     }
 
     public ArrayList<Production> getProductionWithLHS(String label) {
@@ -68,7 +62,6 @@ public class HyperedgeReplacementGrammar {
         }
         return productionsWithLHS;
     }
-
 
     private boolean allProductionValid(List<Production> allProductions) {
         for (Production singleProduction : allProductions) {
@@ -100,16 +93,12 @@ public class HyperedgeReplacementGrammar {
         // the empty production is only allowed if there is no other production having the starting symbol in its rhs.
         if (singleProduction.getRightHandSideOfProduction().indexOf(0) == 'S')
         {
-            //This is done horribly... fix later
             return true;
         }
 
         //Case 1: Er = {e1, e2} where lab(e1), lab(e2) are in the set of NonTerminalLabels && mark(e1) =/= mark(e2)
-        if (singleProduction.getRightHandSideOfProduction().size() > 1 &&
-                nonTerminalLabels.containsAll(singleProduction.getRightHandSideOfProduction()) &&
-                singleProduction.getRightHandSideOfProduction().get(0) !=
-                        singleProduction.getRightHandSideOfProduction().get(1)) {
-            //This might not work - not sure if they are in wrong order (two edges) + really sloppy && statement
+        if (nonTerminalLabels.containsAll(singleProduction.getRightHandSideOfProduction()) &&
+                singleProduction.getRightHandSideOfProduction().get(0) != singleProduction.getRightHandSideOfProduction().get(1)) {
             return true;
         }
 
@@ -117,7 +106,7 @@ public class HyperedgeReplacementGrammar {
     }
 
     private boolean checkIntersectionIsEmpty(ArrayList<String> nonTerminalLabels, ArrayList<String> terminalLabels) {
-        List<String> intersectionElements = new ArrayList<String>();
+        List<String> intersectionElements = new ArrayList<>();
 
         for (String t : nonTerminalLabels) {
             if(terminalLabels.contains(t)) {
@@ -125,12 +114,7 @@ public class HyperedgeReplacementGrammar {
             }
         }
 
-        if(intersectionElements.isEmpty()){
-            return true;
-        }
-        else {
-            return false;
-        }
+        return intersectionElements.isEmpty();
     }
 
     public ArrayList<String> getNonTerminalLabels() {
