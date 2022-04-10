@@ -110,4 +110,10 @@ class GraphGenerationTest {
         testGraphGeneration.generationPhase();
         assertEquals(orderOfProductions, testGraphGeneration.getProductionExecutionOrder());
     }
+
+    @Test
+    void testHRGModification() {
+        testGraphGeneration.linearHRGModification();
+        assertEquals(27, testGraphGeneration.getLinearModificationAllProductions().size());
+    }
 }

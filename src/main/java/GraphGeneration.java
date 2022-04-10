@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -8,6 +9,8 @@ public class GraphGeneration {
     private int[][] nonTerminalMatrix;
     private int[][] productionMatrix;
     private ArrayList<Production> productionExecutionOrder = new ArrayList<>();
+    private ArrayList<Production> linearModificationAllProductions = new ArrayList<>();
+    private HashMap<Integer, int[]> linearModificationProductionRhsSplit = new HashMap<>();
 
     public GraphGeneration(HyperedgeReplacementGrammar inputHRG, int sizeOfGeneratedGraph) {
         this.inputHRG = inputHRG;
@@ -57,6 +60,38 @@ public class GraphGeneration {
         }
     }
 
+    public void linearHRGModification() {
+        for (String nonTerminalLabel : inputHRG.getNonTerminalLabels()) {
+            modificationFoundBreak:
+            for (int j = 1; j <= sizeOfGeneratedGraph; j++) {
+                Boolean modificationFoundFlag = false;
+                for (Production productionWithLabel : inputHRG.getProductionWithLHS(nonTerminalLabel)) {
+                    if (modificationFoundFlag){ continue; }
+                    int lengthPrime = j - productionWithLabel.getNumberOfInternalNodes();
+                    for (int k = 1; k < lengthPrime; k++) {
+                        String newProductionLHS = productionWithLabel.getLeftHandSideOfProduction() + j;
+                        int[] rhsSplit = new int[]{k, lengthPrime-k};
+
+                        Production productionJ = new Production(
+                                newProductionLHS,
+                                productionWithLabel.getProductionId(),
+                                productionWithLabel.getRightHandSideOfProduction(),
+                                productionWithLabel.getRightHandSideHypergraph(),
+                                productionWithLabel.getNumberOfInternalNodes());
+
+                        linearModificationAllProductions.add(productionJ);
+
+                        linearModificationProductionRhsSplit.put(linearModificationAllProductions.indexOf(productionJ),
+                                rhsSplit);
+                        modificationFoundFlag = true;
+                        System.out.println(productionWithLabel.getProductionId());
+                        System.out.println(j + " : " + productionWithLabel.getNumberOfInternalNodes() + " : " + k);
+                    }
+                }
+            }
+        }
+    }
+
     public void generationPhase() {
         int graphLength = sizeOfGeneratedGraph - inputHRG.getProductionWithLHS(inputHRG.getStartingSymbol()).size();
 
@@ -66,6 +101,8 @@ public class GraphGeneration {
 
         productionExecutionOrder = deriveHypergraph(inputHRG.getStartingSymbol(), graphLength, productionExecutionOrder);
     }
+
+
 
     private ArrayList<Production> deriveHypergraph(String symbol, int graphLength,
                                                    ArrayList<Production> productionExecutionOrder) {
@@ -164,5 +201,21 @@ public class GraphGeneration {
 
     public void setProductionExecutionOrder(ArrayList<Production> productionExecutionOrder) {
         this.productionExecutionOrder = productionExecutionOrder;
+    }
+
+    public ArrayList<Production> getLinearModificationAllProductions() {
+        return linearModificationAllProductions;
+    }
+
+    public void setLinearModificationAllProductions(ArrayList<Production> linearModificationAllProductions) {
+        this.linearModificationAllProductions = linearModificationAllProductions;
+    }
+
+    public HashMap<Integer, int[]> getLinearModificationProductionRhsSplit() {
+        return linearModificationProductionRhsSplit;
+    }
+
+    public void setLinearModificationProductionRhsSplit(HashMap<Integer, int[]> linearModificationProductionRhsSplit) {
+        this.linearModificationProductionRhsSplit = linearModificationProductionRhsSplit;
     }
 }
