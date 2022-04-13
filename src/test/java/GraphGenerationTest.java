@@ -114,6 +114,9 @@ class GraphGenerationTest {
     @Test
     void testHRGModification() {
         testGraphGeneration.linearHRGModification();
-        assertEquals(27, testGraphGeneration.getLinearModificationAllProductions().size());
+        for (int i : testGraphGeneration.getLinearModificationProductionRhsSplit().keySet()) {
+            System.out.println(Arrays.toString(testGraphGeneration.getLinearModificationProductionRhsSplit().get(i)) + " : " + testGraphGeneration.getLinearModificationAllProductions().get(i).getLeftHandSideOfProduction());
+        }
+        assertEquals(27, testGraphGeneration.getLinearModificationProductionRhsSplit().size());
     }
 }

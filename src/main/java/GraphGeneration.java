@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class GraphGeneration {
     private HyperedgeReplacementGrammar inputHRG;
@@ -61,35 +58,60 @@ public class GraphGeneration {
     }
 
     public void linearHRGModification() {
-        for (String nonTerminalLabel : inputHRG.getNonTerminalLabels()) {
-            modificationFoundBreak:
+        generateAllPossibleVariations();
+        allVariationsTrimmed();
+    }
+    private void generateAllPossibleVariations() {
+        for (Production production : inputHRG.getNonTerminalProductions()) {
             for (int j = 1; j <= sizeOfGeneratedGraph; j++) {
-                Boolean modificationFoundFlag = false;
-                for (Production productionWithLabel : inputHRG.getProductionWithLHS(nonTerminalLabel)) {
-                    if (modificationFoundFlag){ continue; }
-                    int lengthPrime = j - productionWithLabel.getNumberOfInternalNodes();
-                    for (int k = 1; k < lengthPrime; k++) {
-                        String newProductionLHS = productionWithLabel.getLeftHandSideOfProduction() + j;
-                        int[] rhsSplit = new int[]{k, lengthPrime-k};
+                int sizePrime = j - production.getNumberOfInternalNodes();
+                for (int k = 1; k < sizePrime; k++) {
+                    String newProductionLHS = production.getLeftHandSideOfProduction() + j;
+                    int[] rhsSplit = new int[]{k, sizePrime - k};
+                    Production productionJ = new Production(
+                            newProductionLHS,
+                            production.getProductionId(),
+                            production.getRightHandSideOfProduction(),
+                            production.getRightHandSideHypergraph(),
+                            production.getNumberOfInternalNodes());
 
-                        Production productionJ = new Production(
-                                newProductionLHS,
-                                productionWithLabel.getProductionId(),
-                                productionWithLabel.getRightHandSideOfProduction(),
-                                productionWithLabel.getRightHandSideHypergraph(),
-                                productionWithLabel.getNumberOfInternalNodes());
-
-                        linearModificationAllProductions.add(productionJ);
-
-                        linearModificationProductionRhsSplit.put(linearModificationAllProductions.indexOf(productionJ),
-                                rhsSplit);
-                        modificationFoundFlag = true;
-                        System.out.println(productionWithLabel.getProductionId());
-                        System.out.println(j + " : " + productionWithLabel.getNumberOfInternalNodes() + " : " + k);
-                    }
+                    linearModificationAllProductions.add(productionJ);
+                    linearModificationProductionRhsSplit.put(linearModificationAllProductions.indexOf(productionJ),
+                            rhsSplit);
                 }
             }
         }
+        for (Production production : inputHRG.getTerminalProductions()) {
+            String newProductionLHS = production.getLeftHandSideOfProduction() + 1;
+            int[] rhsSplit = new int[]{0,0};
+
+            Production newProduction = new Production(
+                    newProductionLHS,
+                    production.getProductionId(),
+                    production.getRightHandSideOfProduction(),
+                    production.getRightHandSideHypergraph(),
+                    production.getNumberOfInternalNodes());
+
+            linearModificationAllProductions.add(newProduction);
+            linearModificationProductionRhsSplit.put(linearModificationAllProductions.indexOf(newProduction),
+                    rhsSplit);
+        }
+    }
+
+    private void allVariationsTrimmed() {
+        for (Production production : linearModificationAllProductions) {
+            if (production.getRightHandSideOfProduction().size() > 1 &&
+                    !(containsLHS(linearModificationAllProductions, (production.getRightHandSideOfProduction().get(0) + linearModificationProductionRhsSplit.get(linearModificationAllProductions.indexOf(production))[0]))
+                            && containsLHS(linearModificationAllProductions, (production.getRightHandSideOfProduction().get(1) + linearModificationProductionRhsSplit.get(linearModificationAllProductions.indexOf(production))[1]))))
+            {
+                linearModificationProductionRhsSplit.remove(linearModificationAllProductions.indexOf(production));
+            }
+        }
+    }
+
+    public boolean containsLHS(ArrayList<Production> linearModificationAllProductions, String leftHandSideOfProduction) {
+        return linearModificationAllProductions.stream().anyMatch(
+                                    o -> o.getLeftHandSideOfProduction().equals(leftHandSideOfProduction));
     }
 
     public void generationPhase() {
@@ -217,5 +239,9 @@ public class GraphGeneration {
 
     public void setLinearModificationProductionRhsSplit(HashMap<Integer, int[]> linearModificationProductionRhsSplit) {
         this.linearModificationProductionRhsSplit = linearModificationProductionRhsSplit;
+    }
+
+    public int[] getRHSSplit(int productionIndex) {
+        return linearModificationProductionRhsSplit.get(productionIndex);
     }
 }

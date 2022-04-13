@@ -15,6 +15,7 @@ public class HyperedgeReplacementGrammar {
     private String startingSymbol; //Defined from non-terminal labels
 
     private ArrayList<Production> nonTerminalProductions = new ArrayList<>();
+    private ArrayList<Production> terminalProductions = new ArrayList<>();
 
     public HyperedgeReplacementGrammar(ArrayList<String> nonTerminalLabels, ArrayList<String> terminalLabels,
                                        ArrayList<Production> allProductions, String startingSymbol) {
@@ -29,12 +30,22 @@ public class HyperedgeReplacementGrammar {
         }
 
         collectNonTerminalProductions();
+        collectTerminalProductions();
     }
 
     private void collectNonTerminalProductions() {
         for (Production production : allProductions) {
             if (!Collections.disjoint(production.getRightHandSideOfProduction(), nonTerminalLabels)) {
                 this.nonTerminalProductions.add(production);
+            }
+        }
+    }
+
+    //TODO test
+    private void collectTerminalProductions() {
+        for (Production production : allProductions) {
+            if(!Collections.disjoint(production.getRightHandSideOfProduction(), terminalLabels)) {
+                this.terminalProductions.add(production);
             }
         }
     }
@@ -154,4 +165,13 @@ public class HyperedgeReplacementGrammar {
     public void setNonTerminalProductions(ArrayList<Production> nonTerminalProductions) {
         this.nonTerminalProductions = nonTerminalProductions;
     }
+
+    public ArrayList<Production> getTerminalProductions() {
+        return terminalProductions;
+    }
+
+    public void setTerminalProductions(ArrayList<Production> terminalProductions) {
+        this.terminalProductions = terminalProductions;
+    }
+
 }
