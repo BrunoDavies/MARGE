@@ -7,7 +7,7 @@ public class GraphGeneration {
     private int[][] productionMatrix;
     private ArrayList<Production> productionExecutionOrder = new ArrayList<>();
     private ArrayList<Production> linearModificationAllProductions = new ArrayList<>();
-    private HashMap<Integer, int[]> linearModificationProductionRhsSplit = new HashMap<>();
+    private HashMap<Integer, String[][]> linearModificationProductionRhsSplit = new HashMap<>();
 
     public GraphGeneration(HyperedgeReplacementGrammar inputHRG, int sizeOfGeneratedGraph) {
         this.inputHRG = inputHRG;
@@ -59,15 +59,39 @@ public class GraphGeneration {
 
     public void linearHRGModification() {
         generateAllPossibleVariations();
-        allVariationsTrimmed();
+        boolean changeOccurredFlag = true;
+        while (changeOccurredFlag){
+            changeOccurredFlag = secondVariationTrimmed();
+        }
+
     }
+
+    private boolean secondVariationTrimmed() {
+        boolean changeOccurredFlag = false;
+        ArrayList<Integer> secondVariationTrim = new ArrayList<>();
+        for (Map.Entry<Integer, String[][]> element : linearModificationProductionRhsSplit.entrySet()) {
+            if(Objects.requireNonNull(element.getValue()).length > 1){
+                String leftLabel = element.getValue()[0][1] + element.getValue()[0][0];
+                String rightLabel = element.getValue()[1][1] + element.getValue()[1][0];
+                if (!(linearModificationProductionRhsSplit.containsKey(indexOfLHS(leftLabel)) && linearModificationProductionRhsSplit.containsKey(indexOfLHS(rightLabel)))) {
+                    secondVariationTrim.add(element.getKey());
+                    changeOccurredFlag = true;
+                }
+            }
+        }
+        for (int i : secondVariationTrim) {
+            linearModificationProductionRhsSplit.remove(i);
+        }
+        return changeOccurredFlag;
+    }
+
     private void generateAllPossibleVariations() {
         for (Production production : inputHRG.getNonTerminalProductions()) {
             for (int j = 1; j <= sizeOfGeneratedGraph; j++) {
                 int sizePrime = j - production.getNumberOfInternalNodes();
                 for (int k = 1; k < sizePrime; k++) {
                     String newProductionLHS = production.getLeftHandSideOfProduction() + j;
-                    int[] rhsSplit = new int[]{k, sizePrime - k};
+                    String[][] rhsSplit = {{Integer.toString(k), production.getRightHandSideOfProduction().get(0)}, {Integer.toString(sizePrime - k), production.getRightHandSideOfProduction().get(1)}};
                     Production productionJ = new Production(
                             newProductionLHS,
                             production.getProductionId(),
@@ -83,7 +107,7 @@ public class GraphGeneration {
         }
         for (Production production : inputHRG.getTerminalProductions()) {
             String newProductionLHS = production.getLeftHandSideOfProduction() + 1;
-            int[] rhsSplit = new int[]{0,0};
+            String[][] rhsSplit = {{Integer.toString(0), production.getRightHandSideOfProduction().get(0)}};
 
             Production newProduction = new Production(
                     newProductionLHS,
@@ -98,20 +122,12 @@ public class GraphGeneration {
         }
     }
 
-    private void allVariationsTrimmed() {
-        for (Production production : linearModificationAllProductions) {
-            if (production.getRightHandSideOfProduction().size() > 1 &&
-                    !(containsLHS(linearModificationAllProductions, (production.getRightHandSideOfProduction().get(0) + linearModificationProductionRhsSplit.get(linearModificationAllProductions.indexOf(production))[0]))
-                            && containsLHS(linearModificationAllProductions, (production.getRightHandSideOfProduction().get(1) + linearModificationProductionRhsSplit.get(linearModificationAllProductions.indexOf(production))[1]))))
-            {
-                linearModificationProductionRhsSplit.remove(linearModificationAllProductions.indexOf(production));
-            }
+    public int indexOfLHS (String lhsLabel) {
+        Optional<Production> possibleMatch =  linearModificationAllProductions.stream().filter(o -> o.getLeftHandSideOfProduction().equals(lhsLabel)).findFirst();
+        if (possibleMatch.isEmpty()){
+            return -1;
         }
-    }
-
-    public boolean containsLHS(ArrayList<Production> linearModificationAllProductions, String leftHandSideOfProduction) {
-        return linearModificationAllProductions.stream().anyMatch(
-                                    o -> o.getLeftHandSideOfProduction().equals(leftHandSideOfProduction));
+        return linearModificationAllProductions.indexOf(possibleMatch.get());
     }
 
     public void generationPhase() {
@@ -123,8 +139,6 @@ public class GraphGeneration {
 
         productionExecutionOrder = deriveHypergraph(inputHRG.getStartingSymbol(), graphLength, productionExecutionOrder);
     }
-
-
 
     private ArrayList<Production> deriveHypergraph(String symbol, int graphLength,
                                                    ArrayList<Production> productionExecutionOrder) {
@@ -233,15 +247,15 @@ public class GraphGeneration {
         this.linearModificationAllProductions = linearModificationAllProductions;
     }
 
-    public HashMap<Integer, int[]> getLinearModificationProductionRhsSplit() {
+    public HashMap<Integer, String[][]> getLinearModificationProductionRhsSplit() {
         return linearModificationProductionRhsSplit;
     }
 
-    public void setLinearModificationProductionRhsSplit(HashMap<Integer, int[]> linearModificationProductionRhsSplit) {
+    public void setLinearModificationProductionRhsSplit(HashMap<Integer, String[][]> linearModificationProductionRhsSplit) {
         this.linearModificationProductionRhsSplit = linearModificationProductionRhsSplit;
     }
 
-    public int[] getRHSSplit(int productionIndex) {
+    public String[][] getRHSSplit(int productionIndex) {
         return linearModificationProductionRhsSplit.get(productionIndex);
     }
 }

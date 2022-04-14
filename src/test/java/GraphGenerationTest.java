@@ -114,9 +114,18 @@ class GraphGenerationTest {
     @Test
     void testHRGModification() {
         testGraphGeneration.linearHRGModification();
-        for (int i : testGraphGeneration.getLinearModificationProductionRhsSplit().keySet()) {
-            System.out.println(Arrays.toString(testGraphGeneration.getLinearModificationProductionRhsSplit().get(i)) + " : " + testGraphGeneration.getLinearModificationAllProductions().get(i).getLeftHandSideOfProduction());
+        for (Production production : testGraphGeneration.getLinearModificationAllProductions()) {
+            System.out.println(production.getLeftHandSideOfProduction() + " : " + production.getProductionId() + " : " + Arrays.deepToString(testGraphGeneration.getLinearModificationProductionRhsSplit().get(testGraphGeneration.getLinearModificationAllProductions().indexOf(
+                    production
+            ))));
         }
         assertEquals(27, testGraphGeneration.getLinearModificationProductionRhsSplit().size());
     }
+
+//    @Test
+//    void testHRGModificationPreProcessingPhase() {
+//        testGraphGeneration.linearHRGModification();
+//        testGraphGeneration.preProcessingPhase();
+//        assertEquals(14, testGraphGeneration.getNonTerminalMatrix().length);
+//    }
 }
