@@ -104,7 +104,6 @@ public class GraphGeneration {
         return inputHRG.getAllProductions().get(randomProductionId - 1);
     }
 
-    //TODO fix: wrong randomisation
     private int randomRHSProductionSplit(Production randomProduction, int newGraphLength) throws NoSuchAlgorithmException {
         ArrayList<Integer> allPossibleKValues = new ArrayList<>();
         for (int k = 1; k < newGraphLength; k++) {
