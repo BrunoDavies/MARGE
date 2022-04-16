@@ -4,16 +4,10 @@ import java.util.HashMap;
 import java.util.List;
 
 public class HyperedgeReplacementGrammar {
-    private ArrayList<String> nonTerminalLabels = new ArrayList<>();    //Labels that identify the non-terminal hyperedges
-    private ArrayList<String> terminalLabels = new ArrayList<>();   //Labels that identify the terminal hyperedges
-
-    //Stack for productions.
-    // ArrayList<String> productionLHS = new ArrayList<>();
-    // Hypergraph productionRHS = new Hypergraph();
-    private ArrayList<Production> allProductions; //Add a arraylist with lhs, production id, rhs, and indicator of terminal production
-
-    private String startingSymbol; //Defined from non-terminal labels
-
+    private ArrayList<String> nonTerminalLabels;
+    private ArrayList<String> terminalLabels;
+    private ArrayList<Production> allProductions;
+    private String startingSymbol;
     private ArrayList<Production> nonTerminalProductions = new ArrayList<>();
 
     public HyperedgeReplacementGrammar(ArrayList<String> nonTerminalLabels, ArrayList<String> terminalLabels,

@@ -2,6 +2,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -105,15 +106,9 @@ class GraphGenerationTest {
     }
 
     @Test
-    void testGenerationPhase() {
+    void testGenerationPhase() throws NoSuchAlgorithmException {
         testGraphGeneration.preProcessingPhase();
         testGraphGeneration.generationPhase();
         assertEquals(orderOfProductions, testGraphGeneration.getProductionExecutionOrder());
-    }
-
-    @Test
-    void testHRGModification() {
-        testGraphGeneration.linearHRGModification();
-        assertEquals(27, testGraphGeneration.getLinearModificationAllProductions().size());
     }
 }

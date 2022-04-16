@@ -2,6 +2,14 @@ plugins {
     id 'java'
 }
 
+sourceSets{
+    jmh {
+        compileClasspath += sourceSets.test.runtimeClasspath
+        runtimeClasspath += sourceSets.test.runtimeClasspath
+    }
+}
+
+
 group 'org.example'
 version '1.0-SNAPSHOT'
 
@@ -12,6 +20,9 @@ repositories {
 dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+    jmhCompile project
+    jmhCompile 'org.openjdk.jmh:jmh-core:1.18'
+    jmhAnnotationProcessor 'org.openjdk.jmh:jmh-generator-annprocess:1.18'
 }
 
 test {
