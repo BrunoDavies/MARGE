@@ -1,3 +1,5 @@
+package me.champeau.jmh;
+
 import java.util.ArrayList;
 
 public class Production {

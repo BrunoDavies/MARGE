@@ -1,0 +1,3 @@
+Benchmark                    Mode  Cnt         Score         Error  Units
+SampleBenchmark.fibClassic  thrpt    5       133.638 ±      19.507  ops/s
+SampleBenchmark.fibTailRec  thrpt    5  21220004.927 ± 2672134.850  ops/s
