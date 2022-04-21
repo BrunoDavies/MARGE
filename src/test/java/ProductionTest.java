@@ -9,12 +9,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class ProductionTest {
     //Hypergraph
     private ArrayList<Integer> nodes = new ArrayList<>(Arrays.asList(1, 2, 3));
-    private ArrayList<Integer> edges = new ArrayList<>(Arrays.asList(1, 2, 3));
-    private ArrayList<String> labels = new ArrayList<>(Arrays.asList("C", "D"));
-    private HashMap<Integer, Integer> attributes = null;     //edge -> node
-    private HashMap<String, List<Integer>> labelEdgeMapping = null;
-    private ArrayList<Integer> externalNodes = new ArrayList<>(Arrays.asList(3));
-    private Hypergraph testHypergraph = new Hypergraph(nodes, edges, labels, attributes, labelEdgeMapping, externalNodes);
+    private ArrayList<Integer> internalStatus = new ArrayList<>(Arrays.asList(0, 0, 1));
+    private ArrayList<String> edges = new ArrayList<>(Arrays.asList("A", "B", "C"));
+    private ArrayList<Integer> terminalStatus = new ArrayList<>(Arrays.asList(1, 1, 0));
+
+    private Hypergraph testHypergraph = new Hypergraph(nodes, internalStatus, edges, terminalStatus, null);
 
     //Production
     private String leftHandSideOfProduction = "S";

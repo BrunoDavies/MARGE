@@ -5,9 +5,15 @@
     "rightHandSide" : ["C", "D"],
     "hypergraph": {
       "nodes" : [1, 2, 3],
-      "edges" : [5, 6, 2],
-      "labels" : ["A"],
-      "externalNodes" : 1
+      "internalStatus" : [0, 0, 1],
+      "edges" : ["A, C, d"],
+      "terminalStatus" : [1, 1, 0],
+      "attachments" :
+      {
+        "A" : [1, 2],
+        "C" : [2],
+        "d" : [1, 2, 3]
+      }
     },
     "internalNodes" : 1
   },
@@ -16,10 +22,15 @@
     "productionID": 4,
     "rightHandSide" : ["C", "D"],
     "hypergraph": {
-      "nodes" : [2, 3, 5],
-      "edges" : [8, 1, 4],
-      "labels" : ["D"],
-      "externalNodes" : 3
+      "nodes" : [1, 2],
+      "internalStatus" : [0, 0],
+      "edges" : ["A, C"],
+      "terminalStatus" : [1, 1],
+      "attachments" :
+      {
+        "A" : [1, 2],
+        "C" : [2]
+      }
     },
     "internalNodes" : 0
   }

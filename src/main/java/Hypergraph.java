@@ -4,24 +4,17 @@ import java.util.List;
 
 public class Hypergraph {
     private ArrayList<Integer> nodes;
-    private ArrayList<Integer> edges;
-    private ArrayList<String> labels;
-    private HashMap<Integer, Integer> attributes;   //edge -> node
-    private HashMap<String, List<Integer>> labelEdgeMapping;  //label -> edge
-    private ArrayList<Integer> externalNodes;
+    private ArrayList<Integer> internalStatus;
+    private ArrayList<String> edges;
+    private ArrayList<Integer> terminalStatus;
+    private HashMap<String, ArrayList<Integer>> attachments = new HashMap<>();
 
-    public Hypergraph(ArrayList<Integer> nodes, ArrayList<Integer> edges, ArrayList<String> labels, HashMap<Integer,
-            Integer> attributes, HashMap<String, List<Integer>> labelEdgeMapping, ArrayList<Integer> externalNodes) {
+    public Hypergraph(ArrayList<Integer> nodes, ArrayList<Integer> internalStatus, ArrayList<String> edges, ArrayList<Integer> terminalStatus, HashMap<String, ArrayList<Integer>> attachments) {
         this.nodes = nodes;
+        this.internalStatus = internalStatus;
         this.edges = edges;
-        this.labels = labels;
-        this.attributes = attributes;
-        this.labelEdgeMapping = labelEdgeMapping;
-        this.externalNodes = externalNodes;
-    }
-
-    public int edgeType(String edge) {
-        return labelEdgeMapping.get(edge).size();
+        this.terminalStatus = terminalStatus;
+        this.attachments = attachments;
     }
 
     public ArrayList<Integer> getNodes() {
@@ -32,43 +25,56 @@ public class Hypergraph {
         this.nodes = nodes;
     }
 
-    public ArrayList<Integer> getEdges() {
+    public ArrayList<Integer> getInternalStatus() {
+        return internalStatus;
+    }
+
+    public void setInternalStatus(ArrayList<Integer> internalStatus) {
+        this.internalStatus = internalStatus;
+    }
+
+    public ArrayList<String> getEdges() {
         return edges;
     }
 
-    public void setEdges(ArrayList<Integer> edges) {
+    public void setEdges(ArrayList<String> edges) {
         this.edges = edges;
     }
 
-    public ArrayList<String> getLabels() {
-        return labels;
+    public ArrayList<Integer> getTerminalStatus() {
+        return terminalStatus;
     }
 
-    public void setLabels(ArrayList<String> labels) {
-        this.labels = labels;
+    public ArrayList<String> allTerminalEdges() {
+        ArrayList<String> terminalEdges = new ArrayList<>();
+
+        for (String edge : edges) {
+            if (terminalStatus.get(edges.indexOf(edge)) == 0) {
+                terminalEdges.add(edge);
+            }
+        }
+        return terminalEdges;
+    }
+    public ArrayList<String> allNonTerminalEdges() {
+        ArrayList<String> nonTerminalEdges = new ArrayList<>();
+
+        for (String edge : edges) {
+            if ((Long) terminalStatus.get(edges.indexOf(edge)).intValue() == 1) {
+                nonTerminalEdges.add(edge);
+            }
+        }
+        return nonTerminalEdges;
     }
 
-    public HashMap<Integer, Integer> getAttributes() {
-        return attributes;
+    public void setTerminalStatus(ArrayList<Integer> terminalStatus) {
+        this.terminalStatus = terminalStatus;
     }
 
-    public void setAttributes(HashMap<Integer, Integer> attributes) {
-        this.attributes = attributes;
+    public HashMap<String, ArrayList<Integer>> getAttachments() {
+        return attachments;
     }
 
-    public HashMap<String, List<Integer>> getLabelEdgeMapping() {
-        return labelEdgeMapping;
-    }
-
-    public void setLabelEdgeMapping(HashMap<String, List<Integer>> labelEdgeMapping) {
-        this.labelEdgeMapping = labelEdgeMapping;
-    }
-
-    public ArrayList<Integer> getExternalNodes() {
-        return externalNodes;
-    }
-
-    public void setExternalNodes(ArrayList<Integer> externalNodes) {
-        this.externalNodes = externalNodes;
+    public void setAttachments(HashMap<String, ArrayList<Integer>> attachments) {
+        this.attachments = attachments;
     }
 }

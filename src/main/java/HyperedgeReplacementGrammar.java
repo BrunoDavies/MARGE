@@ -9,11 +9,25 @@ public class HyperedgeReplacementGrammar {
     private String startingSymbol;
     private ArrayList<Production> nonTerminalProductions = new ArrayList<>();
 
+    public HyperedgeReplacementGrammar(ArrayList<Production> allProductions) {
+        this.allProductions = allProductions;
+        this.nonTerminalLabels = getAllNonTerminalEdges();
+        this.terminalLabels = getAllTerminalEdges();
+        this.startingSymbol = allProductions.get(0).getLeftHandSideOfProduction();
+
+        if (!validHRG())
+        {
+            throw new IllegalArgumentException("Invalid Grammar Input");
+        }
+
+        collectNonTerminalProductions();
+    }
+
     public HyperedgeReplacementGrammar(ArrayList<String> nonTerminalLabels, ArrayList<String> terminalLabels,
                                        ArrayList<Production> allProductions, String startingSymbol) {
+        this.allProductions = allProductions;
         this.nonTerminalLabels = nonTerminalLabels;
         this.terminalLabels = terminalLabels;
-        this.allProductions = allProductions;
         this.startingSymbol = startingSymbol;
 
         if (!validHRG())
@@ -106,6 +120,32 @@ public class HyperedgeReplacementGrammar {
         }
 
         return intersectionElements.isEmpty();
+    }
+
+    private ArrayList<String> getAllNonTerminalEdges() {
+        ArrayList<String> allNonTerminalEdges = new ArrayList<>();
+
+        for (Production p : allProductions){
+            for (String edge : p.getRightHandSideHypergraph().allNonTerminalEdges()) {
+                if (!allNonTerminalEdges.contains(edge)){
+                    allNonTerminalEdges.add(edge);
+                }
+            }
+        }
+        return allNonTerminalEdges;
+    }
+
+    private ArrayList<String> getAllTerminalEdges() {
+        ArrayList<String> allTerminalEdged = new ArrayList<>();
+
+        for (Production p : allProductions){
+            for (String edge : p.getRightHandSideHypergraph().allTerminalEdges()) {
+                if (!allTerminalEdged.contains(edge)){
+                    allTerminalEdged.add(edge);
+                }
+            }
+        }
+        return allTerminalEdged;
     }
 
     public ArrayList<String> getNonTerminalLabels() {
