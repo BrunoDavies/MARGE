@@ -1,7 +1,9 @@
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
+import java.io.*;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -89,6 +91,22 @@ class GraphGenerationTest {
         baseGraphGeneration = null;
     }
 
+    private void writeResults(ArrayList<Integer> productionOrder){
+        try{
+            FileWriter fileWriter = new FileWriter("results", true);
+            PrintWriter printWriter = new PrintWriter(fileWriter);
+            printWriter.println(" ");
+            for (Integer i : productionOrder){
+                printWriter.print(i + ", ");
+            }
+            printWriter.close();
+            System.out.println("File has been written");
+
+        }catch(Exception e){
+            System.out.println("Could not create file");
+        }
+    }
+
     @Test
     void testAllVariablesAreAssigned() {
         assertEquals(testGraphSize, testGraphGeneration.getSizeOfGeneratedGraph());
@@ -106,10 +124,16 @@ class GraphGenerationTest {
         assertArrayEquals(testProductionMatrix, testGraphGeneration.getProductionMatrix());
     }
 
-    @Test
+    @RepeatedTest(10000)
     void testGenerationPhase() throws NoSuchAlgorithmException {
         testGraphGeneration.preProcessingPhase();
         testGraphGeneration.generationPhase();
+        ArrayList<Integer> orderByID = new ArrayList<>();
+        for (Production p : testGraphGeneration.getProductionExecutionOrder()) {
+            orderByID.add(p.getProductionId());
+        }
+        writeResults(orderByID);
+        System.out.println(orderByID);
         assertEquals(orderOfProductions, testGraphGeneration.getProductionExecutionOrder());
     }
 }
