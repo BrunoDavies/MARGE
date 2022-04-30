@@ -3,8 +3,10 @@ package me.champeau.jmh;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
 
 @State(Scope.Benchmark)
 public class SampleBenchmark {
@@ -57,7 +59,7 @@ public class SampleBenchmark {
 
 
     //Graph Generation prereqs
-    private int testGraphSize = 7;
+    private int testGraphSize = 8;
     GraphGeneration baseGraphGeneration = new GraphGeneration(baseHRG, testGraphSize);
     GraphGeneration testGraphGeneration;
 
@@ -78,17 +80,23 @@ public class SampleBenchmark {
     @Setup
     public void prepare() {
         testGraphGeneration = baseGraphGeneration;
+        testGraphGeneration.preProcessingPhase();
     }
 
     @TearDown
     public void check() {
-        System.out.println(Arrays.deepToString(testGraphGeneration.getProductionMatrix()));
-        assert testProductionMatrix == testGraphGeneration.getProductionMatrix();
+//        System.out.println(Arrays.deepToString(testGraphGeneration.getProductionMatrix()));
+//        assert testProductionMatrix == testGraphGeneration.getProductionMatrix();
         testGraphGeneration = null;
     }
 
     @Benchmark
-    public void produceCorrectTestMatrix() {
-        testGraphGeneration.preProcessingPhase();
+    public void produceCorrectTestMatrix() throws NoSuchAlgorithmException {
+        testGraphGeneration.generationPhase();
     }
+
+//    @Benchmark
+//    public void generationBenchMark() throws NoSuchAlgorithmException {
+//        testGraphGeneration.generationPhase();
+//    }
 }

@@ -17,7 +17,9 @@ tasks.named('test') {
 }
 
 jmh {
-    warmupIterations = 2
-    iterations = 5
+    warmupIterations = 5
+    benchmarkMode = ['thrpt'] // Benchmark mode. Available modes are: [Throughput/thrpt, AverageTime/avgt, SampleTime/sample, SingleShotTime/ss, All/all]
+    resultFormat = 'JSON' // Result format type (one of CSV, JSON, NONE, SCSV, TEXT)
+    iterations = 100
     fork = 1
 }
