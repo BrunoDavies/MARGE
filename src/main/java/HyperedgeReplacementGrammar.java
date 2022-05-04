@@ -126,6 +126,9 @@ public class HyperedgeReplacementGrammar {
         ArrayList<String> allNonTerminalEdges = new ArrayList<>();
 
         for (Production p : allProductions){
+            if (!allNonTerminalEdges.contains(p.getLeftHandSideOfProduction())){
+                allNonTerminalEdges.add(p.getLeftHandSideOfProduction());
+            }
             for (String edge : p.getRightHandSideHypergraph().allNonTerminalEdges()) {
                 if (!allNonTerminalEdges.contains(edge)){
                     allNonTerminalEdges.add(edge);

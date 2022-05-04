@@ -5,33 +5,32 @@
     "rightHandSide" : ["C", "D"],
     "hypergraph": {
       "nodes" : [1, 2, 3],
-      "internalStatus" : [0, 0, 1],
-      "edges" : ["A, C, d"],
-      "terminalStatus" : [1, 1, 0],
+      "internalStatus" : [1, 1, 0],
+      "edges" : ["C", "D"],
+      "terminalStatus" : [0, 0],
       "attachments" :
       {
-        "A" : [1, 2],
-        "C" : [2],
-        "d" : [1, 2, 3]
+        "C" : [1, 2, 3],
+        "D" : [1, 2]
       }
     },
     "internalNodes" : 1
   },
   {
     "leftHandSide" : "C",
-    "productionID": 4,
+    "productionID": 2,
     "rightHandSide" : ["C", "D"],
     "hypergraph": {
-      "nodes" : [1, 2],
-      "internalStatus" : [0, 0],
-      "edges" : ["A, C"],
-      "terminalStatus" : [1, 1],
+      "nodes" : [1, 2, 3, 4],
+      "internalStatus" : [0, 1, 0, 0],
+      "edges" : ["C", "D"],
+      "terminalStatus" : [0, 0],
       "attachments" :
       {
-        "A" : [1, 2],
-        "C" : [2]
+        "C" : [1, 2, 3],
+        "D" : [2, 4]
       }
     },
-    "internalNodes" : 0
+    "internalNodes" : 1
   }
 ]

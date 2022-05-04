@@ -48,9 +48,9 @@ public class Hypergraph {
     public ArrayList<String> allTerminalEdges() {
         ArrayList<String> terminalEdges = new ArrayList<>();
 
-        for (String edge : edges) {
-            if (terminalStatus.get(edges.indexOf(edge)) == 0) {
-                terminalEdges.add(edge);
+        for (int i = 0; i < edges.size(); i++) {
+            if (terminalStatus.get(i) == 0) {
+                terminalEdges.add(edges.get(i));
             }
         }
         return terminalEdges;
@@ -58,9 +58,9 @@ public class Hypergraph {
     public ArrayList<String> allNonTerminalEdges() {
         ArrayList<String> nonTerminalEdges = new ArrayList<>();
 
-        for (String edge : edges) {
-            if ((Long) terminalStatus.get(edges.indexOf(edge)).intValue() == 1) {
-                nonTerminalEdges.add(edge);
+        for (int i = 0; i < edges.size(); i++) {
+            if (terminalStatus.get(i) == 1) {
+                nonTerminalEdges.add(edges.get(i));
             }
         }
         return nonTerminalEdges;
