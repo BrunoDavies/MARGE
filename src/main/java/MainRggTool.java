@@ -29,6 +29,9 @@ public class MainRggTool {
             GraphGeneration userGeneration = new GraphGeneration(currentInput.getUserHRG(), userGraphSize);
             userGeneration.preProcessingPhase();
             userGeneration.generationPhase();
+            for (Production p: userGeneration.getProductionExecutionOrder()) {
+                System.out.print(p.getProductionId() + " ");
+            }
             allHypergraphs.add(userGeneration.getGeneratedHypergraph());
         }
         writeGeneratedGraph(allHypergraphs);

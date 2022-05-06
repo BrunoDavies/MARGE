@@ -61,7 +61,7 @@
       "terminalStatus" : [1],
       "attachments" :
       {
-        "C" : [1, 2, 3]
+        "c" : [1, 2, 3]
       }
     },
     "numberOfInternalNodes" : 0
@@ -77,7 +77,7 @@
       "terminalStatus" : [1],
       "attachments" :
       {
-        "C" : [1, 2]
+        "d" : [1, 2]
       }
     },
     "numberOfInternalNodes" : 0
@@ -110,7 +110,7 @@
       "terminalStatus" : [1],
       "attachments" :
       {
-        "C" : [1, 2]
+        "d" : [1, 2]
       }
     },
     "numberOfInternalNodes" : 0

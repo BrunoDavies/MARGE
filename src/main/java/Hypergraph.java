@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class Hypergraph {
     private ArrayList<Integer> nodes;
@@ -79,5 +78,32 @@ public class Hypergraph {
 
     public void setAttachments(HashMap<String, ArrayList<Integer>> attachments) {
         this.attachments = attachments;
+    }
+
+    public void removeEdge(Production replacement) {
+        terminalStatus.remove(edges.indexOf(replacement.getLeftHandSideOfProduction()));
+        edges.remove(replacement.getLeftHandSideOfProduction());
+
+        attachments.remove(replacement.getLeftHandSideOfProduction());
+//        System.out.println(attachments);
+    }
+
+    public void addEdge(Production production) {
+        for (String edge : production.getRightHandSideHypergraph().edges){
+            edges.add(edge);
+        }
+
+        for (int status : production.getRightHandSideHypergraph().terminalStatus) {
+            terminalStatus.add(status);
+        }
+
+        for (int node : production.getRightHandSideHypergraph().nodes){
+            if (!nodes.contains(node)){
+                nodes.add(node);
+            }
+        }
+
+//        System.out.println(production.getRightHandSideHypergraph().attachments);
+        attachments.putAll(production.getRightHandSideHypergraph().attachments);
     }
 }

@@ -63,8 +63,13 @@ public class GraphGeneration {
     }
 
     private Hypergraph applyDerivationOrder(ArrayList<Production> productionExecutionOrder) {
-        //Place holder
-        return productionExecutionOrder.get(1).getRightHandSideHypergraph();
+        Hypergraph baseHypergraph = productionExecutionOrder.get(0).getRightHandSideHypergraph();
+        for (int i = 1; i < productionExecutionOrder.size(); i++) {
+            baseHypergraph.removeEdge(productionExecutionOrder.get(i));
+            System.out.println(productionExecutionOrder.get(i).getRightHandSideHypergraph().getAttachments());
+            baseHypergraph.addEdge(productionExecutionOrder.get(i));
+        }
+        return baseHypergraph;
     }
 
     private ArrayList<Production> deriveHypergraph(String symbol, int graphLength, ArrayList<Production> productionExecutionOrder) throws NoSuchAlgorithmException {
