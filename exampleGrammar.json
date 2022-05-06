@@ -1,9 +1,9 @@
 [
   {
-    "leftHandSide" : "S",
-    "productionID": 1,
-    "rightHandSide" : ["C", "D"],
-    "hypergraph": {
+    "leftHandSideOfProduction" : "S",
+    "productionId": 1,
+    "rightHandSideOfProduction" : ["C", "D"],
+    "rightHandSideHypergraph": {
       "nodes" : [1, 2, 3],
       "internalStatus" : [1, 1, 0],
       "edges" : ["C", "D"],
@@ -14,23 +14,105 @@
         "D" : [1, 2]
       }
     },
-    "internalNodes" : 1
+    "numberOfInternalNodes" : 1
   },
   {
-    "leftHandSide" : "C",
-    "productionID": 2,
-    "rightHandSide" : ["C", "D"],
-    "hypergraph": {
-      "nodes" : [1, 2, 3, 4],
-      "internalStatus" : [0, 1, 0, 0],
+    "leftHandSideOfProduction" : "S",
+    "productionId": 2,
+    "rightHandSideOfProduction" : ["C", "D"],
+    "rightHandSideHypergraph": {
+      "nodes" : [1, 2],
+      "internalStatus" : [1, 1],
       "edges" : ["C", "D"],
       "terminalStatus" : [0, 0],
       "attachments" :
       {
-        "C" : [1, 2, 3],
+        "C" : [1, 2],
+        "D" : [1]
+      }
+    },
+    "numberOfInternalNodes" : 0
+  },
+  {
+    "leftHandSideOfProduction" : "C",
+    "productionId": 3,
+    "rightHandSideOfProduction" : ["C", "D"],
+    "rightHandSideHypergraph": {
+      "nodes" : [1, 2, 3, 4],
+      "internalStatus" : [1, 1, 1, 0],
+      "edges" : ["C", "D"],
+      "terminalStatus" : [0, 0],
+      "attachments" :
+      {
+        "C" : [1, 3, 4],
         "D" : [2, 4]
       }
     },
-    "internalNodes" : 1
+    "numberOfInternalNodes" : 1
+  },
+  {
+    "leftHandSideOfProduction" : "C",
+    "productionId": 4,
+    "rightHandSideOfProduction" : ["c"],
+    "rightHandSideHypergraph": {
+      "nodes" : [1, 2, 3],
+      "internalStatus" : [1, 1, 1],
+      "edges" : ["c"],
+      "terminalStatus" : [1],
+      "attachments" :
+      {
+        "C" : [1, 2, 3]
+      }
+    },
+    "numberOfInternalNodes" : 0
+  },
+  {
+    "leftHandSideOfProduction" : "C",
+    "productionId": 5,
+    "rightHandSideOfProduction" : ["d"],
+    "rightHandSideHypergraph": {
+      "nodes" : [1, 2],
+      "internalStatus" : [1, 1],
+      "edges" : ["d"],
+      "terminalStatus" : [1],
+      "attachments" :
+      {
+        "C" : [1, 2]
+      }
+    },
+    "numberOfInternalNodes" : 0
+  },
+  {
+    "leftHandSideOfProduction" : "D",
+    "productionId": 6,
+    "rightHandSideOfProduction" : ["D", "C"],
+    "rightHandSideHypergraph": {
+      "nodes" : [1, 2, 3],
+      "internalStatus" : [1, 1, 0],
+      "edges" : ["C", "D"],
+      "terminalStatus" : [0, 0],
+      "attachments" :
+      {
+        "C" : [1, 3],
+        "D" : [2, 3]
+      }
+    },
+    "numberOfInternalNodes" : 1
+  },
+  {
+    "leftHandSideOfProduction" : "D",
+    "productionId": 7,
+    "rightHandSideOfProduction" : ["d"],
+    "rightHandSideHypergraph": {
+      "nodes" : [1, 2],
+      "internalStatus" : [1, 1],
+      "edges" : ["d"],
+      "terminalStatus" : [1],
+      "attachments" :
+      {
+        "C" : [1, 2]
+      }
+    },
+    "numberOfInternalNodes" : 0
   }
 ]

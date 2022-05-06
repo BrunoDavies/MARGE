@@ -62,7 +62,7 @@ public class HyperedgeReplacementGrammar {
     public ArrayList<Production> getProductionWithLHS(String label) {
         ArrayList<Production> productionsWithLHS = new ArrayList<>();
         for (Production production : allProductions) {
-            if (production.getLeftHandSideOfProduction() == label) {
+            if (production.getLeftHandSideOfProduction().equals(label)) {
                 productionsWithLHS.add(production);
             }
         }

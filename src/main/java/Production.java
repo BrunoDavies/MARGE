@@ -16,6 +16,9 @@ public class Production {
         this.numberOfInternalNodes = numberOfRegNodes;
     }
 
+    public Production() {
+    }
+
     public String getLeftHandSideOfProduction() {
         return leftHandSideOfProduction;
     }

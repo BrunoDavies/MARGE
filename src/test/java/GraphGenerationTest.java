@@ -121,10 +121,12 @@ class GraphGenerationTest {
     @Test
     void testPreProcessingPhaseProductionMatrix() {
         testGraphGeneration.preProcessingPhase();
+        System.out.println(Arrays.deepToString(testGraphGeneration.getProductionMatrix()));
+
         assertArrayEquals(testProductionMatrix, testGraphGeneration.getProductionMatrix());
     }
 
-    @RepeatedTest(10000)
+    @RepeatedTest(1)
     void testGenerationPhase() throws NoSuchAlgorithmException {
         testGraphGeneration.preProcessingPhase();
         testGraphGeneration.generationPhase();

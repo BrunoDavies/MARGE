@@ -17,6 +17,9 @@ public class Hypergraph {
         this.attachments = attachments;
     }
 
+    public Hypergraph() {
+    }
+
     public ArrayList<Integer> getNodes() {
         return nodes;
     }
@@ -49,7 +52,7 @@ public class Hypergraph {
         ArrayList<String> terminalEdges = new ArrayList<>();
 
         for (int i = 0; i < edges.size(); i++) {
-            if (terminalStatus.get(i) == 0) {
+            if (terminalStatus.get(i) == 1) {
                 terminalEdges.add(edges.get(i));
             }
         }
@@ -59,7 +62,7 @@ public class Hypergraph {
         ArrayList<String> nonTerminalEdges = new ArrayList<>();
 
         for (int i = 0; i < edges.size(); i++) {
-            if (terminalStatus.get(i) == 1) {
+            if (terminalStatus.get(i) == 0) {
                 nonTerminalEdges.add(edges.get(i));
             }
         }

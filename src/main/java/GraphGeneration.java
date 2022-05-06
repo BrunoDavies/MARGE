@@ -8,6 +8,7 @@ public class GraphGeneration {
     private int[][] nonTerminalMatrix;
     private int[][] productionMatrix;
     private ArrayList<Production> productionExecutionOrder = new ArrayList<>();
+    private Hypergraph generatedHypergraph;
 
     public GraphGeneration(HyperedgeReplacementGrammar inputHRG, int sizeOfGeneratedGraph) {
         this.inputHRG = inputHRG;
@@ -61,6 +62,11 @@ public class GraphGeneration {
         productionExecutionOrder = deriveHypergraph(inputHRG.getStartingSymbol(), graphLength, productionExecutionOrder);
     }
 
+    private Hypergraph applyDerivationOrder(ArrayList<Production> productionExecutionOrder) {
+        //Place holder
+        return productionExecutionOrder.get(1).getRightHandSideHypergraph();
+    }
+
     private ArrayList<Production> deriveHypergraph(String symbol, int graphLength, ArrayList<Production> productionExecutionOrder) throws NoSuchAlgorithmException {
         Production randomProduction = generationPhaseRandomProduction(symbol, graphLength);
 
@@ -81,7 +87,6 @@ public class GraphGeneration {
             productionExecutionOrder = deriveHypergraph(randomProduction.getRightHandSideOfProduction().get(1),
                     newGraphLength - randomNonTerminalVariation, productionExecutionOrder);
         }
-        
         return productionExecutionOrder;
     }
 
@@ -89,7 +94,7 @@ public class GraphGeneration {
         List<Integer> listOfProductionId = new ArrayList<>();
 
         for (Production p : inputHRG.getProductionWithLHS(symbol)) {
-            for (int i = 0; i < productionMatrix[p.getProductionId() -1][graphLength - 1]; i++) {
+            for (int i = 0; i < productionMatrix[p.getProductionId() - 1][graphLength - 1]; i++) {
                 listOfProductionId.add(p.getProductionId());
             }
         }
@@ -155,5 +160,14 @@ public class GraphGeneration {
 
     public void setProductionExecutionOrder(ArrayList<Production> productionExecutionOrder) {
         this.productionExecutionOrder = productionExecutionOrder;
+    }
+
+    public Hypergraph getGeneratedHypergraph() {
+        generatedHypergraph = applyDerivationOrder(productionExecutionOrder);
+        return generatedHypergraph;
+    }
+
+    public void setGeneratedHypergraph(Hypergraph generatedHypergraph) {
+        this.generatedHypergraph = generatedHypergraph;
     }
 }
