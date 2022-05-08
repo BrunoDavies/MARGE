@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Hypergraph {
     private ArrayList<Integer> nodes;
@@ -80,12 +81,12 @@ public class Hypergraph {
         this.attachments = attachments;
     }
 
-    public void removeEdge(Production replacement) {
+    public void removeEdge(Production replacement, boolean isNonTerminal) {
         terminalStatus.remove(edges.indexOf(replacement.getLeftHandSideOfProduction()));
         edges.remove(replacement.getLeftHandSideOfProduction());
+        internalStatus = new ArrayList<>();
+        attachments.entrySet().removeIf(entry -> entry.getKey().equals(entry.getKey().toUpperCase()));
 
-        attachments.remove(replacement.getLeftHandSideOfProduction());
-//        System.out.println(attachments);
     }
 
     public void addEdge(Production production) {
@@ -97,13 +98,21 @@ public class Hypergraph {
             terminalStatus.add(status);
         }
 
-        for (int node : production.getRightHandSideHypergraph().nodes){
-            if (!nodes.contains(node)){
-                nodes.add(node);
-            }
+
+        for (int i : nodes) {
+            internalStatus.add(1);
         }
 
-//        System.out.println(production.getRightHandSideHypergraph().attachments);
-        attachments.putAll(production.getRightHandSideHypergraph().attachments);
+        for (Map.Entry<String, ArrayList<Integer>> k : production.getRightHandSideHypergraph().attachments.entrySet()) {
+            if (attachments.containsKey(k.getKey())){
+                if (k.getKey().length() < 2) {
+                    attachments.put(k.getKey() + "2", k.getValue());
+                } else {
+                    attachments.put(k.getKey() + Integer.parseInt(k.getKey().indent(1)) + 1, k.getValue());
+                }
+
+            }
+            attachments.put(k.getKey(), k.getValue());
+        }
     }
 }

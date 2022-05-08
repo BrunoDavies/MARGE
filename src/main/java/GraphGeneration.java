@@ -65,8 +65,8 @@ public class GraphGeneration {
     private Hypergraph applyDerivationOrder(ArrayList<Production> productionExecutionOrder) {
         Hypergraph baseHypergraph = productionExecutionOrder.get(0).getRightHandSideHypergraph();
         for (int i = 1; i < productionExecutionOrder.size(); i++) {
-            baseHypergraph.removeEdge(productionExecutionOrder.get(i));
-            System.out.println(productionExecutionOrder.get(i).getRightHandSideHypergraph().getAttachments());
+            boolean isNonTerminal = inputHRG.getNonTerminalProductions().contains(productionExecutionOrder.get(i));
+            baseHypergraph.removeEdge(productionExecutionOrder.get(i), isNonTerminal);
             baseHypergraph.addEdge(productionExecutionOrder.get(i));
         }
         return baseHypergraph;
